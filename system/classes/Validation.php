@@ -260,7 +260,7 @@ class Validation {
      * Displays validation errors as unordered list.
      * 
      * @access  private
-	 * @return  $string  Error string as unordered list.
+     * @return  $string  Error string as unordered list.
      */
     public function errors()
     {
