@@ -21,11 +21,7 @@ class Pages extends Controller {
         if ($this->_validate())
         {
             Model::factory('pages')->insert(Input::post());
-            //header('Location: ' . WEB . 'pages/add');
-        }
-        else
-        {
-            $this->_data['errors'] = $this->_validation->errors();
+            header('Location: ' . WEB . 'pages/add');
         }
 
         Template::instance()
@@ -59,12 +55,12 @@ class Pages extends Controller {
     
     private function _validate()
     {
-        $this->_validation = Validation::factory()
+        $validation = Validation::factory()
                                 ->label('title', 'Τίτλος')
                                 ->label('content', 'Περιεχόμενο')
                                 ->rule('title', 'required')
                                 ->rule('content', 'required');
         
-        return $this->_validation->validate();
+        return $validation->validate();
     }
 }

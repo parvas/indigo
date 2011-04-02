@@ -1,7 +1,5 @@
 <?php defined('SYSTEM') or exit('No direct script access allowed');?>
-<div id="errors">
-<?= $errors; ?> 
-</div>
+<?= Form::errors(); ?> 
 <?= Form::open(); ?>
 <?= Form::label('Title', 'title2', TRUE); ?>
 <?= Form::text('title2')?>
