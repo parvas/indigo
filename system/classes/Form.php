@@ -588,6 +588,6 @@ class Form {
      */
     public static function errors()
     {
-        return Validation::factory()->errors();
+        return Validation::current()->errors();
     }
 }
