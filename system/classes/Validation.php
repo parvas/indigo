@@ -10,7 +10,7 @@ class Validation {
      * - paypal
      * - credit card
      * - alpha_dash without preg_match
-	 * - date validation (newer, older, etc)
+     * - date validation (newer, older, etc)
      */
      
     /**
@@ -72,11 +72,23 @@ class Validation {
      */
     private $_custom_errors = array();
     
-    
-    private static $_instance;
     /**
-     *
-     * @return Validation 
+     * Static var holding class instance. 
+     * Not sure if we 're gonna use this, though.
+     * 
+     * @access    private
+     * @staticvar Validation 
+     */
+    private static $_instance;
+    
+    
+    /**
+     * Factory pattern method. Validation instances must be created 
+     * by using this method.
+     * 
+     * @access public
+     * @return Validation
+     * @static 
      */
     public static function factory()
     {
@@ -100,7 +112,7 @@ class Validation {
      * @access  public  
      * @param   string $field  Field name.
      * @param   string $label  Label to be assigned.
-     * @return  Validation $this   Current validation object state, 
+     * @return  Validation     Current validation object state, 
      *                         so that we can use method chaining.
      */ 
     public function label($field, $label)
@@ -127,7 +139,7 @@ class Validation {
      * @param   string $filter  Filter to be set. If TRUE, filter is set to all
      *                          fields.
      * @param   mixed  $params  Extra parameters that a specific filter may need.
-     * @return  object $this    Current validation object state, 
+     * @return  Validation      Current validation object state, 
      *                          so that we can use method chaining.
      */ 
     public function filter($field, $filter, $params = NULL)
@@ -163,7 +175,7 @@ class Validation {
      * @param   string $field   Field name.
      * @param   string $rule    Rule to be set.
      * @param   mixed  $params  Extra parameters that a specific rule may need.
-     * @return  Validation    Current validation object state, 
+     * @return  Validation      Current validation object state, 
      *                          so that we can use method chaining.
      */    
     public function rule($field, $rule, $params = NULL)
@@ -188,7 +200,10 @@ class Validation {
      */
     public function validate()
     {
-        // 
+        /* Form has not been submitted, do nothing.
+         * Hack that essentially allows developer to skip 
+         * form submission check when writing a controller method.  
+         */
         if (count($_POST) === 0)
         {
             return false;
@@ -202,7 +217,10 @@ class Validation {
         
         foreach ($this->_rules as $field => $rules)
         {
+            // Mmm... works, but need to find a more elegant solution.
+            // Useful for HMVC calls.
             if (!isset($_POST[$field])) return false;
+            
             // if a field is not required and rule is not "matches" or "required", 
             // check it *only* if it contains some value
             if (!array_key_exists('matches', $rules) && 
@@ -337,13 +355,13 @@ class Validation {
             $params = implode(', ', $params);
         }
 		
-		// "matches" rule needs label name instead of value
-		if ($rule === 'matches')
-		{
-			$swap = $this->_labels[$field];
-			$this->_labels[$field] = $this->_labels[$params];
-			$params = $swap;
-		}
+        // "matches" rule needs label name instead of value
+        if ($rule === 'matches')
+        {
+            $swap = $this->_labels[$field];
+            $this->_labels[$field] = $this->_labels[$params];
+            $params = $swap;
+        }
         
         if ($params === NULL)
         {
@@ -353,15 +371,15 @@ class Validation {
         elseif (is_array($params))
         {
             $this->_errors[] = sprintf($this->_error_messages[$rule], 
-            						   $this->_labels[$field], 
-            						   $params[0], 
-            						   $params[1]);
+                                       $this->_labels[$field], 
+                                       $params[0], 
+                                       $params[1]);
         }
         else
         {
             $this->_errors[] = sprintf($this->_error_messages[$rule], 
-            						   $this->_labels[$field], 
-            						   $params);            
+                                       $this->_labels[$field], 
+                                       $params);            
         }
     }
     

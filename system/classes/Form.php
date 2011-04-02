@@ -5,27 +5,27 @@ class Form {
     /**
      * Used as the return string of the class.
      * 
-     * @var string $_data
-     * @static 
+     * @access    private
+     * @staticvar string $_data
      */
     private static $_data;
 	
-	/**
+    /**
      * Label suffix.
-     * 
-     * @var string $_label_suffix
-     * @static 
+     *  
+     * @access    private
+     * @staticvar string $_label_suffix
      */
-	private static $_label_suffix = '';
+    private static $_label_suffix = '';
 	
-	/**
+    /**
      * Array containing form labels, 
-	 * to be later used by form validation.
+     * to be later used by form validation.
      * 
-     * @var array $_labels
-     * @static 
+     * @access    private
+     * @staticvar array $_labels
      */
-	private static $_labels = array();
+    private static $_labels = array();
     
     /**
      * Used to produce an opening form tag.
@@ -52,7 +52,7 @@ class Form {
      * Must always be used after open_form().
      * 
      * @access  public
-     * @return  string     Closing form tag.
+     * @return  string  Closing form tag.
      * @see     open
      * @static
      */
@@ -135,7 +135,7 @@ class Form {
         return self::_input('hidden', $name, $atts);
     }
 	
-	/**
+    /**
      * Produces an email field.
      * 
      * @param   string $name  Field name.
@@ -144,11 +144,10 @@ class Form {
      * @uses    _input        Renders input field.
      * @static
      */
-	public static function email($name, array $atts = NULL)
-	{
-		return self::_input('email', $name, $atts);
-	}
-    
+    public static function email($name, array $atts = NULL)
+    {
+        return self::_input('email', $name, $atts);
+    }
     
     /**
      * Used to produce a textarea field.
@@ -411,7 +410,7 @@ class Form {
      * @access  private
      * @param   string $field    Name of field to be re-populated.
      * @param   string $default  Default field value to be set if no $_POST 
-	 * 							 value is found.
+     * 				 value is found.
      * @return  string           Field value to print.
      * @static 
      */
@@ -422,15 +421,15 @@ class Form {
     
     /**
      * Re-populates a checkbox field with its $_POST value in case of 
-	 * validation failure.
+     * validation failure.
      * 
      * @access  private
      * @param   string $field     Name of field to be re-populated.
      * @param   string $value     Field value, contains value only if field is 
-	 * 							  group member.
+     * 				  group member.
      * @param   boolean $default  Whether field is checked by default.
      * @return  boolean           If field is to be checked, an array is 
-	 * 							  returned so that it can be parsed. 
+     *   			  returned so that it can be parsed. 
      * @static 
      */
     private static function _set_checkbox($field, $default, $value)
@@ -455,37 +454,37 @@ class Form {
     }
 	
 	
-	/**
+    /**
      * Re-populates a checkbox field with its $_POST value in case of 
-	 * validation failure.
+     * validation failure.
      * 
      * @access  private
      * @param   string $field     Name of field to be re-populated.
      * @param   string $value     Field value, contains value only if field is 
-	 * 							  group member.
+     *				  group member.
      * @param   boolean $default  Whether field is checked by default.
      * @return  boolean           If field is to be checked, an array is 
-	 * 							  returned so that it can be parsed. 
+     *				  returned so that it can be parsed. 
      * @static 
      */
 	private static function _set_radio($field, $default, $value)
 	{
-		if (count($_POST) === 0)
-        {
-            return $default;
-        }
+            if (count($_POST) === 0)
+            {
+                return $default;
+            }
 		
-		if (isset($_POST[$field]))
-		{
-			return ($_POST[$field] === $value);
-		}
-		
-		return FALSE;
+            if (isset($_POST[$field]))
+            {
+                    return ($_POST[$field] === $value);
+            }
+
+            return FALSE;
 	}
     
     /**
      * Re-populates a select field with its $_POST value in case of 
-	 * validation failure.
+     * validation failure.
      * 
      * @access  private
      * @param   string $field    Name of field to be re-populated.
@@ -501,94 +500,94 @@ class Form {
             return (!is_null($default) && in_array($value, $default));
         }
         
-		// do we have a multiselect?
+        // do we have a multiselect?
         $field = self::_extract_array_name($field);
         
-		if (isset($_POST[$field]))
+        if (isset($_POST[$field]))
         {
             // if list is multiselect, search if value is in it
             return is_array($_POST[$field]) ? 
-                   	  in_array($value, $_POST[$field]) : 
-                   	  ($_POST[$field] === $value);
+                   in_array($value, $_POST[$field]) : 
+                   ($_POST[$field] === $value);
         }
 
         return FALSE;
     }
 	
-	/**
-	 * Autoassigns an attribute (typically id or value).
-	 * 
-	 * Why not just pass array value as argument (e.g. $atts['id'])? 
-	 * So that PHP does not throw annoying notices if this value is not set.
-	 * 
-	 * @access  private
-	 * @param	array|string $value  Array containing all extra field attributes, 
-	 * 								 or string with attribute value.
-	 * @param	string $default		 Default value to be assigned as attribute.  
-	 * @param	string $att	  		 Specific attribute to be set.	
-	 * @return	string		  		 Requested attribute.
-	 * @static
-	 */
-	private static function _auto_assign($value, $default, $att)
-	{
-		if (is_array($value))
-		{
-			// search in attribute array; if not present return field name
-			return isset($value[$att]) ? $value[$att] : $default;	
-		}
-		else
-		{
-			// return value if exists; default otherwise
-			return !is_null($value) ? $value : $default; 	
-		}
-	}
-	
-	/**
-	 * Lets user set a custom suffix for labels (default is ':').
-	 * 
-	 * @access  public
-	 * @param   string $suffix  Suffix string.  
-	 * @static
-	 */
-	public static function set_label_suffix($suffix)
-	{
-		self::$_label_suffix = $suffix;
-	}
-	
-	/**
-	 * Extracts array name from string if supplied argument is in array format,
-	 * for example: string: select[] -> name: select.
-	 * 
-	 * @access  private
-	 * @param   string $name  String containing variable name.
-	 * @return  string   	  Array name if argument is array, 
-	 * 					 	  the argument itself otherwise.  
-	 * @static
-	 */
-	private static function _extract_array_name($name)
-	{
-		return (($pos = strpos($name, '[')) !== FALSE) ? substr($name, $pos) : $name;	
-	}
-	
-	/**
-	 * Returns all labels set in this form (so there is no need to 
-	 * re-set them for validation).
-	 * 
-	 * @access  public
-	 * @return  array $_labels  Array containing all form labels.  
-	 * @static
-	 */
-	public static function get_labels()
-	{
-		return self::$_labels;
-	}
-        
-        /**
-         *
-         * @return type 
-         */
-        public static function errors()
+    /**
+     * Autoassigns an attribute (typically id or value).
+     * 
+     * Why not just pass array value as argument (e.g. $atts['id'])? 
+     * So that PHP does not throw annoying notices if this value is not set.
+     * 
+     * @access  private
+     * @param	array|string $value  Array containing all extra field attributes, 
+     *                               or string with attribute value.
+     * @param	string $default      Default value to be assigned as attribute.  
+     * @param	string $att          Specific attribute to be set.	
+     * @return	string               Requested attribute.
+     * @static
+     */
+    private static function _auto_assign($value, $default, $att)
+    {
+        if (is_array($value))
         {
-            return Validation::factory()->errors();
+            // search in attribute array; if not present return field name
+            return isset($value[$att]) ? $value[$att] : $default;	
         }
+        else
+        {
+            // return value if exists; default otherwise
+            return !is_null($value) ? $value : $default; 	
+        }
+    }
+	
+    /**
+     * Lets user set a custom suffix for labels (default is ':').
+     * 
+     * @access  public
+     * @param   string $suffix  Suffix string.  
+     * @static
+     */
+    public static function set_label_suffix($suffix)
+    {
+        self::$_label_suffix = $suffix;
+    }
+	
+    /**
+     * Extracts array name from string if supplied argument is in array format,
+     * for example: string: select[] -> name: select.
+     * 
+     * @access  private
+     * @param   string $name  String containing variable name.
+     * @return  string        Array name if argument is array, 
+     * 			      the argument itself otherwise.  
+     * @static
+     */
+    private static function _extract_array_name($name)
+    {
+        return (($pos = strpos($name, '[')) !== FALSE) ? substr($name, $pos) : $name;	
+    }
+	
+    /**
+     * Returns all labels set in this form (so there is no need to 
+     * re-set them for validation).
+     * 
+     * @access  public
+     * @return  array $_labels  Array containing all form labels.  
+     * @static
+     */
+    public static function get_labels()
+    {
+        return self::$_labels;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public static function errors()
+    {
+        return Validation::factory()->errors();
+    }
 }
