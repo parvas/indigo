@@ -92,7 +92,12 @@ class Validation {
      */
     public static function factory()
     {
-        return new Validation;
+        return self::$_instance = new Validation;
+    }
+    
+    public static function current()
+    {
+        return self::$_instance;
     }
     
     /**
