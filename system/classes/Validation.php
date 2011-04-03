@@ -95,6 +95,14 @@ class Validation {
         return self::$_instance = new Validation;
     }
     
+    /**
+     * Returns current (bound to module being executed at the time) 
+     * validation instance
+     * 
+     * @access public
+     * @return Validation
+     * @static
+     */
     public static function current()
     {
         return self::$_instance;
@@ -205,7 +213,8 @@ class Validation {
      */
     public function validate()
     {
-        /* Form has not been submitted, do nothing.
+        /* 
+         * Form has not been submitted, do nothing.
          * Hack that essentially allows developer to skip 
          * form submission check when writing a controller method.  
          */
