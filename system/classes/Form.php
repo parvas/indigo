@@ -583,8 +583,11 @@ class Form {
     }
 
     /**
-     *
-     * @return type 
+     * Automates validation error display. Used only in views.
+     * 
+     * @access public
+     * @return Validation
+     * @static 
      */
     public static function errors()
     {
