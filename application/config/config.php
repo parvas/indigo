@@ -2,8 +2,7 @@
 
 $config = array(
     'default_controller' => 'pages/add',
-    'database'           => 'project',
-    'default_language'   => 'el'
+    'default_language'   => 'el',
     );
 
 return $config;
