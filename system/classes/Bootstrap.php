@@ -5,6 +5,6 @@ function __autoload($class)
     require_once SYSTEM . "classes/{$class}.php";
 }
 
-//echo Config::get('default_language');
+Config::instance()->load('config');
 I18n::set_lang('el');
 Route::set();
