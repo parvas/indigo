@@ -96,17 +96,25 @@ class I18n {
             }
         }
         
-        // is a cookie set? first make sure noone has messed up with cookies...
-        if (isset($_COOKIE['locale']) && isset($this->_locales[$_COOKIE['locale']]))
+        // is a cookie set
+        if (isset($_COOKIE['locale']))
         {
-            // then load the language
-            $this->_lang = $_COOKIE['locale'];
+            // language has been disabled or someone has messed up with cookies...
+            if (isset($this->_locales[$_COOKIE['locale']]))
+            {
+                // load the language
+                $this->_lang = $_COOKIE['locale'];
+                return;
+            }
+            else
+            {
+                // cookie is either useless or suspicious
+                Cookie::delete('locale');
+            }
         }
-        else
-        {
-            // user has not selected a language or cookie is invalid, load default
-            $this->_lang = Config::instance()->get('default_language');
-        }
+            
+        // user has not selected a language, load default
+        $this->_lang = Config::instance()->get('default_language');
     }
     
     /**
