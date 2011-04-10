@@ -96,7 +96,7 @@ class I18n {
             }
         }
         
-        // is a cookie set
+        // is a cookie set?
         if (isset($_COOKIE['locale']))
         {
             // language has been disabled or someone has messed up with cookies...
