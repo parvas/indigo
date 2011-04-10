@@ -99,7 +99,6 @@ class I18n {
         // is a cookie set?
         if (isset($_COOKIE['locale']))
         {
-            // language has been disabled or someone has messed up with cookies...
             if (isset($this->_locales[$_COOKIE['locale']]))
             {
                 // load the language
@@ -108,6 +107,7 @@ class I18n {
             }
             else
             {
+                // language has been disabled or someone has messed up with cookies...
                 // cookie is either useless or suspicious
                 Cookie::delete('locale');
             }
