@@ -1,15 +1,13 @@
 <?php
+
+$start = microtime();
+
 /**
  * @todo
  * 
- * -> remove index.php form urls
  * -> review template/view system
- * -> configuration class
  * -> error class
  * -> logging class
- * -> file include (eg. css)
- * -> decide routing system
- * -> check autoloads
  */
 
 /*
@@ -45,3 +43,5 @@ define ('LANGS',    SYSTEM . 'languages/');
 
 // Come on, Indigo!!!
 require_once SYSTEM . 'classes/Bootstrap.php';
+
+echo microtime() - $start;
