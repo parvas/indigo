@@ -2,32 +2,86 @@
 
 class Cookie {
     
-    public static function set($name, $value, $expire = null)
+    /**
+     * Set a cookie using native setcookie() PHP function.
+     * 
+     * @access public
+     * @param  string $name    Cookie name. 
+     * @param  string $value   Cookie value.
+     * @param  int $expire     Cookie expiration in seconds.
+     * @param  string $path    Cookie path.
+     * @param  string $domain  Website domain.
+     * @param  bool $secure    Cookie should only be set under an ssl connection.
+     * @param  bool $httponly  Cookie accessible only through HTTP protocol.
+     */
+    public static function set($name, $value, $expire = null, $path = null, $domain = null, $secure = false, $httponly = false)
     {
         if (!isset($cookies))
         {
+            // get cookie configuration items
             require_once APP . 'config/cookies.php';
         }
         
         if (!is_null($expire))
         {
-            $cookies['expire'] = $expire + time();
+            $expire += time();
+        }
+        else
+        {
+            $expire = $cookies['expire'];
         }
         
-        return setcookie($name, $value, $cookies['expire'], 
-                                        $cookies['path'], 
-                                        $cookies['domain'], 
-                                        $cookies['secure'], 
-                                        $cookies['httponly']);
+        if (is_null($path))
+        {
+            $path = $cookies['path'];
+        }
+        
+        if (is_null($domain))
+        {
+            $domain = $cookies['domain'];
+        }
+        
+        if ($secure !== true)
+        {
+            $secure = $cookies['secure'];
+        }
+        
+        if ($httponly !== true)
+        {
+            $httponly = $cookies['httponly'];
+        }
+        
+        if (!setcookie($name, $value, $expire, $path, $domain, $secure, $httponly))
+        {
+            echo 'Error setting cookie';
+        }
     }
     
+    /**
+     * Returns a cookie.
+     * 
+     * @access public
+     * @param  string $name  Name of the cookie requested. 
+     * @return mixed   
+     */
     public static function get($name)
     {
         return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
     }
     
-    public static function delete($name)
+    /**
+     * Delete cookie using native setcookie() PHP function.
+     * 
+     * @access public
+     * @param  string $name    Cookie name. 
+     * @param  string $path    Cookie path.
+     * @param  string $domain  Website domain.
+     * @param  bool $secure    Cookie should only be set under an ssl connection.
+     * @param  bool $httponly  Cookie accessible only through HTTP protocol.
+     * @uses   Cookie::set()
+     */
+    public static function delete($name, $path = null, $domain = null, $secure = false, $httponly = false)
     {
-        return setcookie($name, '', time());
+        static::set($name, '', -3600, $path, $domain, $secure, $httponly);
     }
 }
