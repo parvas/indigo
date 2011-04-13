@@ -7,5 +7,3 @@ $cookies = array(
     'secure'     => false,
     'httponly'   => false
     );
-
-return $cookies;

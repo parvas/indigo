@@ -65,16 +65,32 @@ class Form {
      * Used to produce a submit input field.
      * 
      * @access  public 
-     * @param   string $name            Field name.
      * @param   string $value           Button text.
      * @param   array $atts             Extra field attributes array.
      * @return  string                  Submit field HTML element.
      * @uses    HTML::parse_attributes  Injects extra attributes.
      * @static
      */    
-    public static function submit($name, $value, array $atts = NULL)
+    public static function submit($value, array $atts = NULL)
     {
-        self::$_data = '<input type="submit" name="' . $name . '" value="' . $value . '"';
+        self::$_data = '<input type="submit" value="' . $value . '"';
+        
+        return self::$_data . HTML::parse_attributes($atts) . ' />';
+    }
+    
+    /**
+     * Used to produce a reset input field.
+     * 
+     * @access  public 
+     * @param   string $value           Button text.
+     * @param   array $atts             Extra field attributes array.
+     * @return  string                  Submit field HTML element.
+     * @uses    HTML::parse_attributes  Injects extra attributes.
+     * @static
+     */    
+    public static function reset($value, array $atts = NULL)
+    {
+        self::$_data = '<input type="reset" value="' . $value . '"';
         
         return self::$_data . HTML::parse_attributes($atts) . ' />';
     }
@@ -394,7 +410,6 @@ class Form {
         if ($required === TRUE)
         {
             $label = '<span class="required">*</span>' . $label;  
-            I18n::load();
             $atts['title'] = _REQUIRED_;  
         }
         
@@ -453,7 +468,6 @@ class Form {
         return FALSE;
     }
 	
-	
     /**
      * Re-populates a checkbox field with its $_POST value in case of 
      * validation failure.
@@ -467,20 +481,20 @@ class Form {
      *				  returned so that it can be parsed. 
      * @static 
      */
-	private static function _set_radio($field, $default, $value)
-	{
-            if (count($_POST) === 0)
-            {
-                return $default;
-            }
-		
-            if (isset($_POST[$field]))
-            {
-                    return ($_POST[$field] === $value);
-            }
+    private static function _set_radio($field, $default, $value)
+    {
+        if (count($_POST) === 0)
+        {
+            return $default;
+        }
 
-            return FALSE;
-	}
+        if (isset($_POST[$field]))
+        {
+                return ($_POST[$field] === $value);
+        }
+
+        return FALSE;
+    }
     
     /**
      * Re-populates a select field with its $_POST value in case of 

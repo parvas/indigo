@@ -12,7 +12,7 @@ abstract class Model {
     
     private static function _find($model)
     {
-        require APP . 'modules/pages/' . $model . '_model.php';
+        require_once APP . 'modules/pages/' . $model . '_model.php';
     }
 }
 

@@ -10,7 +10,7 @@ class Route {
         
         if (self::$_module == '')
         {
-            self::$_module = Config::get('default_controller');
+            self::$_module = Config::instance()->get('default_controller');
         }
         
         Module::factory(self::$_module);

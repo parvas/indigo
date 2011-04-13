@@ -2,7 +2,5 @@
 
 $config = array(
     'default_controller' => 'pages/add',
-    'default_language'   => 'el',
+    'default_language'   => 'el'
     );
-
-return $config;

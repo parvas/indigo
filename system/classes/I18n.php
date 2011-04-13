@@ -141,17 +141,10 @@ class I18n {
      *  
      * @access public
      * @param  mixed $filename  Name of file to be loaded.
+     * @return i18n             Class instance.
      */
     public function load($filename = null)
     {
-        // Main language file requested
-        if (is_null($filename))
-        {
-            // include file and exit
-            require_once APP . 'languages/' . $this->_lang . '.php';
-            return;
-        }
-        
         // if file is already loaded, do nothing
         if (!in_array($filename, $this->_files))
         {
@@ -160,6 +153,8 @@ class I18n {
             $this->_files[] = $filename;
             $this->_lines = array_merge($this->_lines, $lang);
         }
+        
+        return $this;
     }
     
     /**

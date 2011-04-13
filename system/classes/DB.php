@@ -2,6 +2,7 @@
 
 class DB extends Mongo {
     
+    private static $_params = array();
     private static $_instance;
     
     /**
@@ -16,13 +17,14 @@ class DB extends Mongo {
         }
         
         $mongo = new DB();
-        
-        return self::$_instance = $mongo->{Config::get('database')};
+        return self::$_instance = $mongo->{static::$_params['database']};
     }
     
     public function __construct() 
     {
-        parent::__construct();
+        require_once APP . 'config/database.php';
+        self::$_params['database'] = $db['database'];
+        parent::__construct("mongodb://{$db['username']}:{$db['password']}@{$db['hostname']}/{$db['database']}");
     }
     
     /**

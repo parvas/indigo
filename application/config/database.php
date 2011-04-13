@@ -6,5 +6,3 @@ $db = array(
     'username'  => 'parvas',
     'password'  => 'parpar',
     );
-
-return $db;

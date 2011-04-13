@@ -13,11 +13,14 @@
 </head>
 <body>
     <div id="container">
+        <div id="langs">
+            <?php echo I18n::instance()->locale_box(); ?>
+        </div>
         <?php echo "<h1>{$title}</h1>"; ?>
         <?php echo $body; ?>
     </div>
     <div id="footer">
-    Powered by <span id="indigo">indigo</span>
+    Powered by <a id="indigo" target="_blank" href="https://github.com/parvas/indigo">indigo</a>
     </div>
 </body>
 </html>
