@@ -43,11 +43,8 @@ q:before, q:after {
 }
 
 a {
-    margin: 0;
-    padding: 0;
-    font-size: 100%;
-    vertical-align: baseline;
-    background: transparent;
+    text-decoration: none;
+    color: inherit;
 }
 
 /* change colours to suit your needs */
@@ -101,7 +98,7 @@ input, select {
 /*-------------------CSS Reset End-----------------------*/
 
 body {
-    font: 13px Trebuchet MS;
+    font: 13px "Trebuchet MS";
     background-color: #ddd;
 }
 
@@ -147,6 +144,7 @@ h1 {
 
 form {
     width: 400px;
+    padding-bottom: 50px;
 }
 
 pre {
@@ -185,8 +183,9 @@ textarea, select {
     border: 1px solid #aaa;
     padding: 3px;
     color: #444;
-    font-size: 15px;
+    font-size: 13px;
     margin-top: 5px;
+    font-family: Arial;
 } 
 
 select {
@@ -199,9 +198,36 @@ input[type="checkbox"], input[type="radio"] {
     margin: 2px !important;
 }
 
-input[type="submit"] {
+input[type="submit"], input[type="reset"] {
     float: right;
-    margin: 0;
+    margin: 5px 0 5px 5px;
+    font-family: inherit;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    padding: 3px 12px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+    color: #666;
+    text-shadow: #ccc 1px 1px 1px;
+    background: -webkit-linear-gradient(#eee, #ddd);
+    background: -moz-linear-gradient(#eee, #ddd);
+    background: -o-linear-gradient(#eee, #ddd);
+    cursor: pointer;
+    -webkit-transition: color 0.2s ease-in, border 0.2s ease-in; 
+    -moz-transition: color 0.2s ease-in, border 0.2s ease-in; 
+    -o-transition: color 0.2s ease-in, border 0.2s ease-in; 
+}
+
+input[type="submit"]:hover, input[type="reset"]:hover {
+    color: #333;
+    border: 1px solid #aaa;
+}
+
+input[type="submit"]:active, input[type="reset"]:active {
+    background: -webkit-linear-gradient(#cdcdcd, #ddd);
+    background: -moz-linear-gradient(#cdcdcd, #ddd);
+    background: -o-linear-gradient(#cdcdcd, #ddd);
 }
 
 .subtitle {
@@ -220,4 +246,36 @@ input[type="submit"] {
     font-size: 12px;
     color: red;
     line-height: 120%;
+}
+
+#langs {
+    text-align: right;
+}
+
+#langs img {
+    cursor: pointer;
+}
+
+#langs input[type="submit"] {
+    border: 0 !important;
+    height: 24px;
+    -webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+    border-radius: 0px !important;
+    background-repeat: no-repeat !important;
+    float: none;
+    margin: 0;
+}
+
+#langs form {
+    width: 100%;
+    padding: 0;
+}
+
+#el {
+    background-image: url(../../../application/assets/images/flags/el.png);
+}
+
+#en {
+    background-image: url(../../../application/assets/images/flags/en.png);
 }
