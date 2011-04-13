@@ -73,8 +73,7 @@ class Validation {
     private $_custom_errors = array();
     
     /**
-     * Static var holding class instance. 
-     * Not sure if we 're gonna use this, though.
+     * Stores class instance. 
      * 
      * @access    private
      * @staticvar Validation 
@@ -226,9 +225,6 @@ class Validation {
         // merging filters and rules
         $this->_rules = array_merge_recursive($this->_filters, $this->_rules);
         
-        // loading error messages in case there are errors
-        $this->_error_messages = I18n::load('form_validation'); 
-        
         foreach ($this->_rules as $field => $rules)
         {
             // Mmm... works, but need to find a more elegant solution.
@@ -250,6 +246,9 @@ class Validation {
             {
                 if ($this->_run_rule($field, $rule, $this->_post[$field], $params) === FALSE)
                 {
+                    // load validation error strings
+                    I18n::instance()->load('form_validation');
+                    
                     // validation for this rule failed, set an error
                     $this->_set_error($field, $rule, $params);
 
@@ -379,19 +378,19 @@ class Validation {
         
         if ($params === NULL)
         {
-            $this->_errors[] = sprintf($this->_error_messages[$rule], 
+            $this->_errors[] = sprintf(I18n::instance()->line($rule), 
                                        $this->_labels[$field]);
         }
         elseif (is_array($params))
         {
-            $this->_errors[] = sprintf($this->_error_messages[$rule], 
+            $this->_errors[] = sprintf(I18n::instance()->line($rule), 
                                        $this->_labels[$field], 
                                        $params[0], 
                                        $params[1]);
         }
         else
         {
-            $this->_errors[] = sprintf($this->_error_messages[$rule], 
+            $this->_errors[] = sprintf(I18n::instance()->line($rule), 
                                        $this->_labels[$field], 
                                        $params);            
         }
