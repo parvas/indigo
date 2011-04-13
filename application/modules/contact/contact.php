@@ -34,8 +34,8 @@ class Contact extends Controller {
     private function _validate()
     {
         $validation = Validation::factory()
-                                ->label('title2', 'Τίτλος2')
-                                ->label('content2', 'Περιεχόμενο2')
+                                ->label('title2', _TITLE_)
+                                ->label('content2', _CONTENT_)
                                 ->rule('title2', 'required')
                                 ->rule('content2', 'required');
        

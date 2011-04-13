@@ -2,11 +2,6 @@
 
 class Pages_Model extends Model {
     
-    public function __construct() 
-    {
-        
-    }
-    
     public function insert(array $input)
     {
         $data = array(

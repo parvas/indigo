@@ -23,7 +23,9 @@ class Pages extends Controller {
             Model::factory('pages')->insert(Input::post());
             header('Location: ' . WEB . 'pages/add');
         }
-
+        
+        Cookie::set('pages', 'set');
+        
         Template::instance()
                 ->head('')
                 ->title('Προσθήκη Σελίδας')
