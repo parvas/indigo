@@ -1,0 +1,31 @@
+<?php  if (!defined('SYSTEM')) exit('No direct script access allowed');
+
+$lang = array(
+    'required'          => 'Field "%s" is required',
+    'valid_email'       => 'Field "%s" must be a valid e-mail',
+    'valid_ip'          => 'Field "%s" must be a valid IP address',
+    'valid_url'         => 'Field "%s" must be a valid URL',
+    'date_time'         => 'Field "%s" must be a valid date/time',
+    'min_length'        => 'Field "%s" must be at least %s characters long',
+    'max_length'        => 'Field "%s" must be shorter than %s characters',
+    'max_length'        => 'Field "%s" must be exactly %s characters long',
+    'length_range'      => 'Field "%s" must be between %s and %s characters long',
+    'matches'           => 'Fields "%s" and "%s" do not match',
+    'min_value'         => 'Field "%s" must be equal or greater than %s',
+    'max_value'         => 'Field "%s" must be less than or equal to %s',
+    'integer'           => 'Field "%s" must be an integer value',
+    'numeric'           => 'Field "%s" must be a numeric value',
+    'natural'           => 'Field "%s" must be an integer equal to or greater than 0',
+    'natural_no_zero'   => 'Field "%s" must ne an integer greater than 0',
+    'allowed'           => 'Field "%s" may contain one of the following values: %s',
+    'value_range'       => 'Field "%s" must contain a value between %s and %s',
+    'alpha'             => 'Field "%s" may contain only characters',
+    'alpha_numeric'     => 'Field "%s" may contain only characters and numbers',
+    'alpha_dash'        => 'Field "%s" may contain only characters, and the symbols "-" and "_"',
+    'credit_card'       => 'Field "%s" must be a valid credit card number',
+    'paypal'            => 'Field "%s" πmust be a valid oaypal account number',
+    'postcode'          => 'Field "%s" must be a valid postcode',
+    'greek_postcode'    => 'Field "%s" must be a valid Greek postcode',
+    'phone'             => 'Field "%s" must be a valid phone number',
+    'regex'             => 'Valid characters for field "%s": %s'
+);
