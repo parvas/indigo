@@ -136,21 +136,20 @@ class I18n {
     }
     
     /**
-     * Load requested language file. 
-     * Main language file is loaded if no parameter passed.
+     * Loads requested language file. 
      *  
      * @access public
-     * @param  mixed $filename  Name of file to be loaded.
-     * @return i18n             Class instance.
+     * @param  string $file  Name of file to be loaded.
+     * @return i18n          Class instance.
      */
-    public function load($filename = null)
+    public function load($file)
     {
         // if file is already loaded, do nothing
-        if (!in_array($filename, $this->_files))
+        if (!in_array($file, $this->_files))
         {
-            require_once LANGS . $this->_lang . '/' . $filename . '.php';
+            require_once LANGS . $this->_lang . '/' . $file . '.php';
             
-            $this->_files[] = $filename;
+            $this->_files[] = $file;
             $this->_lines = array_merge($this->_lines, $lang);
         }
         
