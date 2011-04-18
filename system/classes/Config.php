@@ -71,7 +71,7 @@ class Config {
             return $this;
         }
         
-        echo 'File ' . $file . '.php not found in config folder.';
+        Exceptions::exception("File {$file} .php not found in config folder.");
         return $this;
     }
     
