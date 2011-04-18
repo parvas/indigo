@@ -2,6 +2,37 @@
 
 class HTML {
 	
+    private static $_valid_atts = array(
+        'action',
+        'method',
+        'type',
+        'id',
+        'name',
+        'value',
+        'href',
+        'src',
+        'width',
+        'height',
+        'cols',
+        'rows',
+        'size',
+        'maxlength',
+        'rel',
+        'media',
+        'accept-charset',
+        'accept',
+        'tabindex',
+        'accesskey',
+        'alt',
+        'title',
+        'class',
+        'style',
+        'selected',
+        'checked',
+        'readonly',
+        'disabled'
+    );
+    
     /**
      * Static variable used as the 
      * return string of parse_attributes
@@ -157,12 +188,17 @@ class HTML {
         {
             foreach ($atts as $att => $value)
             {
+                if (!in_array($att, static::$_valid_atts, true))
+                {
+                    throw new Exceptions("Invalid attribute passed ('{$att}')");
+                }
+                
                 // if attribute is empty, don't print anything
                 if ($value === NULL || $value === '')
                 {
                     continue;    
                 }
-
+                
                 self::$_data .= ' ' . $att . '="' . $value . '"';
             }
         }
