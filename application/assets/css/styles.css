@@ -106,9 +106,9 @@ h1 {
     font-size: 18px;
 }
 
-#container, #footer, #left {
+#container, footer, nav, header {
     width: 700px;
-    margin: 30px auto;
+    margin: 5px auto;
     border: 1px solid #aaa;
     background-color: #fff;
     padding: 30px;
@@ -116,10 +116,20 @@ h1 {
     -moz-box-shadow: 2px 2px 15px #aaa;
 }
 
-#footer {
+nav {
+    padding: 5px 30px;
+}
+
+header {
+    font-size: 40px;
+    font-style: italic;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px #888;
+}
+
+footer {
     width: 740px;
     padding: 10px;
-    margin-top: -20px !important;
     font-size: 11px;
 }
 
@@ -127,13 +137,6 @@ h1 {
     font-weight: bold;
     text-shadow: 1px 1px 1px #aaa;
     font-style: italic;
-}
-
-#left {
-    margin: 0px 15px 30px 85px;
-    float: left;
-    width: 95px;
-    height: 330px;
 }
 
 .required {
