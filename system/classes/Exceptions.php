@@ -122,7 +122,7 @@ class Exceptions extends Exception {
     }
     
     /**
-     * Outputs exception to predefines HTML template.
+     * Outputs exception to predefined HTML template.
      * 
      * @access private
      * @param  string $template  Path to the HTML template to output exception.
