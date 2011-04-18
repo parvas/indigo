@@ -2,8 +2,6 @@
 
 class Pages extends Controller {
     
-    private $_validation;
-    
     public function __construct()
     {
         parent::__construct();
@@ -24,12 +22,16 @@ class Pages extends Controller {
             header('Location: ' . WEB . 'pages/add');
         }
         
-        Cookie::set('pages', 'set');
-        
         Template::instance()
                 ->head('')
                 ->title('Προσθήκη Σελίδας')
                 ->render('pages/page_add', $this->_data);
+        
+        /*Email::instance()
+                ->to('parvas.webdev@gmail.com')
+                ->subject('test')
+                ->message('test')
+                ->send();*/
     }
     
     public function show($title)

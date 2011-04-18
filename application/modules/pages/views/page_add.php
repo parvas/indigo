@@ -7,5 +7,9 @@
 <?= Form::textarea('summary'); ?>
 <?= Form::label(_CONTENT_, 'content', TRUE); ?>
 <?= Form::textarea('content'); ?>
-<?= Form::submit('Submit'); ?>
+<?= Form::label(_KEYWORDS_, 'keywords'); ?>
+<?= Form::textarea('keywords'); ?>
+<?= Form::label(_DESCRIPTION_, 'description'); ?>
+<?= Form::textarea('description'); ?>
+<?= Form::submit(_SUBMIT_); ?>
 <?= Form::close();?>
