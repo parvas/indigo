@@ -172,15 +172,14 @@ class I18n {
     /**
      * Force set a language.
      * 
-     * @param string $lang       Code of language to be loaded.
-     * @param bool   $permanent  Whether the change should be made permanent.
+     * @param string $lang     Code of language to be loaded.
+     * @param bool $permanent  Whether the change should be made permanent.
      */
     public function set_lang($language, $permanent = false)
     {
         if (!isset($this->_locales[$language]))
         {
-            echo "Error. Requsted language {$language} not found.";
-            return;
+            throw new Exceptions("Error. Requsted language ({$language}) not found.");
         }
         
         $this->_lang = $language;
