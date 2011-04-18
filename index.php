@@ -1,15 +1,5 @@
 <?php
 
-$start = microtime();
-
-/**
- * @todo
- * 
- * -> review template/view system
- * -> error class
- * -> logging class
- */
-
 /*
  * set error reporting
  */
@@ -28,7 +18,6 @@ $start = microtime();
  * - CSS:       full server path to css folder 
  * - IMAGES:    full server path to images folder 
  * - THIRD:     full server path to third party files folder 
- * - LANGS:     full server path to languages folder 
  */
 define ('SELF',     pathinfo(__FILE__, PATHINFO_BASENAME));
 define ('SERVER',   str_replace(SELF, '', __FILE__));
@@ -39,9 +28,6 @@ define ('JS',       WEB . 'application/assets/js/');
 define ('CSS',      WEB . 'application/assets/css/');
 define ('IMAGES',   WEB . 'application/assets/images/');
 define ('THIRD',    WEB . 'application/assets/third_party/');
-define ('LANGS',    SYSTEM . 'languages/');
 
 // Come on, Indigo!!!
 require_once SYSTEM . 'classes/Bootstrap.php';
-
-echo microtime() - $start;
