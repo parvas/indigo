@@ -3,6 +3,17 @@
 class Log {
     
     /**
+     * Stores log types.
+     * 
+     * @var array
+     * @static 
+     */
+    private static $_types = array (
+        'error' => 'ERROR',
+        'debug' => 'DEBUG'
+    );
+    
+    /**
      * Stores log filename.
      * 
      * @var string
@@ -24,13 +35,18 @@ class Log {
      * 
      * @param string $message  The message to be logged.
      */
-    public static function write($message)
+    public static function write($type, $message)
     {
         $path = APP . 'logs/';
         
+        if (!isset(static::$_types[$type]))
+        {
+            throw new Exceptions("Logging type '{$type}' not recognized");
+        }
+        
         if (!is_writeable($path) || empty($message))
         {
-            return;
+            throw new Exceptions("Directory '{$path}' is not writeable");
         }
 
         // separate file for specific date
@@ -41,13 +57,13 @@ class Log {
             static::$_message .= "<" . "?php if (!defined('SYSTEM')) exit('No direct script access allowed'); ?" . ">\n\n";
         }
         
-        // create file of it does not exist
+        // create file if it does not exist
         if (!$fp = fopen($path . static::$_filename, 'a'))
         {
-            return;
+            throw new Exceptions('Error opening file ' . $path . static::$_filename . ' for editing');
         }
         
-        static::$_message .= '[' . date('d-M-Y H:i:s') . '] --> ' . $message . "\n";
+        static::$_message .= '[' . date('d-M-Y H:i:s') . '] ' . static::$_types[$type] . ' :: ' . $message . "\n";
         
         chmod($path . static::$_filename, 0633);
         flock($fp, LOCK_EX);

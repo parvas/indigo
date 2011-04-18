@@ -54,8 +54,7 @@ class Module {
                 // url class segment parsed, but no directory found 
                 if (self::$_class == '')
                 {
-                    echo "404!!!";
-                    return;
+                    Exceptions::error_404(WEB . $module);
                 }
                 // directory (and class) is set, include class file.
                 //require_once self::$_directory . self::$_class . '.php';
@@ -76,8 +75,7 @@ class Module {
             // no nesting, direct call to <module>/index
             if (!is_dir(self::$_directory . $module))
             {
-                echo '404!!!!';
-                return;
+                Exceptions::error_404(WEB . $module);
             }
             
             self::$_directory .= $module . '/';
@@ -92,10 +90,6 @@ class Module {
         call_user_func_array(array($instance, self::$_method), self::$_params);
         self::_remove_from_stack();
         return $instance;
-    }
-    
-    private function __construct() {
-        ;
     }
     
     public static function find($item)
@@ -137,5 +131,3 @@ class Module {
         return count(self::$_modules) === 1;
     }
 }
-
-?>

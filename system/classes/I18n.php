@@ -147,7 +147,7 @@ class I18n {
         // if file is already loaded, do nothing
         if (!in_array($file, $this->_files))
         {
-            require_once LANGS . $this->_lang . '/' . $file . '.php';
+            require_once SYSTEM . 'languages/' . $this->_lang . '/' . $file . '.php';
             
             $this->_files[] = $file;
             $this->_lines = array_merge($this->_lines, $lang);

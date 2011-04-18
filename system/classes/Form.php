@@ -74,7 +74,7 @@ class Form {
     public static function submit($value, array $atts = NULL)
     {
         self::$_data = '<input type="submit" value="' . $value . '"';
-        
+
         return self::$_data . HTML::parse_attributes($atts) . ' />';
     }
     
@@ -461,8 +461,8 @@ class Form {
         {
             // if field is a group, search if value is in it
             return is_array($_POST[$field]) ? 
-                   	  in_array($value, $_POST[$field]) : 
-                   	  isset($_POST[$field]);
+                   in_array($value, $_POST[$field]) : 
+                   isset($_POST[$field]);
         }
         
         return FALSE;

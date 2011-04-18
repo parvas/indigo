@@ -12,15 +12,6 @@ class Validation {
      * - alpha_dash without preg_match
      * - date validation (newer, older, etc)
      */
-     
-    /**
-     * Array storing all possible validation error messages,
-     * which were imported from the appropriate language file.
-     * 
-     * @access private
-     * @var    array $_error_messages
-     */
-    private $_error_messages = array();
     
     /**
      * Array storing current validation error messages,
@@ -505,7 +496,7 @@ class Validation {
     {
         if (count($range) !== 2 || $range[0] >= $range[1])
         {
-            return;
+            throw new Exceptions('Invalid range supplied');
         }
         
         return (strlen($field) >= $range[0]) && (strlen($field) <= $range[1]);
@@ -552,7 +543,7 @@ class Validation {
     {
         if (count($range) !== 2 || $range[0] >= $range[1])
         {
-            return;
+            throw new Exceptions('Invalid range supplied');
         }
         
         return ($field >= $range[0]) && ($field <= $range[1]);
