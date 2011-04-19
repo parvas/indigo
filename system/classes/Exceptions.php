@@ -86,7 +86,7 @@ class Exceptions extends Exception {
         
         ob_end_clean();
         
-        static::_render_exception(APP . 'views/error.php');
+        static::_render_exception(APP . 'views/error.php', $info);
         exit(1);
     }
     
