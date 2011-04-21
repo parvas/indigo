@@ -86,7 +86,7 @@ class Exceptions extends Exception {
         
         ob_end_clean();
         
-        static::_render_exception(APP . 'views/error.php', $info);
+        static::_render_exception(SYSTEM . 'views/error.php', $info);
         exit(1);
     }
     
@@ -118,7 +118,7 @@ class Exceptions extends Exception {
             'line'      => $line
         );
         
-        static::_render_exception(APP . 'views/php_error.php', $info);
+        static::_render_exception(SYSTEM . 'views/php_error.php', $info);
     }
     
     /**
