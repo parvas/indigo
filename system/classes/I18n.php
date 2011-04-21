@@ -8,7 +8,7 @@ class I18n {
      * @access private
      * @var string
      */
-    private $_lang;
+    private $_lang; 
     
     /**
      * Caches loaded filenames.
