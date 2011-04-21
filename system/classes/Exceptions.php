@@ -86,11 +86,7 @@ class Exceptions extends Exception {
         
         ob_end_clean();
         
-<<<<<<< HEAD
-        static::_render_exception(SYSTEM . 'views/error.php');
-=======
         static::_render_exception(SYSTEM . 'views/error.php', $info);
->>>>>>> origin/master
         exit(1);
     }
     
