@@ -179,7 +179,7 @@ class I18n {
     {
         if (!isset($this->_locales[$language]))
         {
-            throw new Exceptions("Error. Requsted language ({$language}) not found.");
+            throw new Exceptions("Requsted language ({$language}) not found.");
         }
         
         $this->_lang = $language;
