@@ -73,8 +73,8 @@ class Exceptions extends Exception {
         $type = static::$_levels[$e->getCode()];
         $file = $e->getFile(); 
         $line = $e->getLine();
-        $trace = '<pre>' . $e->getTraceAsString() . '</pre>';
         $message = $e->getMessage();
+        $trace = '<pre>' . $e->getTraceAsString() . '</pre>';
         
         $info = array(
             'type'      => $type,
@@ -86,7 +86,7 @@ class Exceptions extends Exception {
         
         ob_end_clean();
         
-        static::_render_exception(APP . 'views/error.php');
+        static::_render_exception(SYSTEM . 'views/error.php');
         exit(1);
     }
     
@@ -118,7 +118,7 @@ class Exceptions extends Exception {
             'line'      => $line
         );
         
-        static::_render_exception(APP . 'views/php_error.php', $info);
+        static::_render_exception(SYSTEM . 'views/php_error.php', $info);
     }
     
     /**
