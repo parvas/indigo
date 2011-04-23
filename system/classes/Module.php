@@ -92,12 +92,10 @@ class Module {
         return $instance;
     }
     
-    public static function find($item)
+    public static function find($item, $type = 'module')
     {
         if (strpos($item, '/') !== FALSE)
         {
-            self::$_directory = APP . 'modules/';
-            
             $segments = explode('/', $item);
             
             foreach ($segments as $segment)
@@ -107,13 +105,37 @@ class Module {
                     self::$_directory .= $segment . '/';
                     continue;
                 }
-
-                if (file_exists(self::$_directory . 'views/' . $segment . '.php'))
-                {
-                    return self::$_directory . 'views/' . $segment . '.php';
-                }
             }
         }
+        else 
+        {
+            // No HMVC, directory path is set to current module
+            $segment = $item;
+        }
+        
+        switch ($type)
+        {
+            case 'model':
+                $filename = self::$_directory . $segment . '_model.php';
+                break;
+
+            case 'view':
+                $filename = self::$_directory . 'views/' . $segment . '.php';
+                break;
+
+            case 'module':
+                break;
+
+            default:
+                throw new Exceptions('Undefined file type');
+        }
+        
+        if (!file_exists($filename))
+        {
+            throw new Exceptions("Requested file '{$filename}' not found");
+        }
+
+        return $filename;
     }
     
     private static function _add_to_stack()
