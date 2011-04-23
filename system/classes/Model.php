@@ -5,14 +5,10 @@ abstract class Model {
     public static function factory($model)
     {
        $class = ucfirst($model) . '_Model';
-       self::_find($model);
-
+       
+       require_once Module::find($model, 'model');
+       
        return new $class;
-    }
-    
-    private static function _find($model)
-    {
-        require_once APP . 'modules/pages/' . $model . '_model.php';
     }
 }
 

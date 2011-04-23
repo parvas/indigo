@@ -36,7 +36,7 @@ class View {
         ob_start();
         
         extract($data);
-        require Module::find($view);
+        require Module::find($view, 'view');
         $this->_contents = ob_get_contents();
         
         ob_end_clean();
