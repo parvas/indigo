@@ -23,12 +23,6 @@ class Pages extends Controller {
         Template::instance()
                 ->title(_ADD_PAGE_)
                 ->render('pages/page_add', $this->_data);
-        
-        /*Email::instance()
-                ->to('parvas.webdev@gmail.com')
-                ->subject('test')
-                ->message('test')
-                ->send();*/
     }
     
     public function show($id)
