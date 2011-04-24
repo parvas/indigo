@@ -56,7 +56,7 @@ class Pages extends Controller {
     
     private function _validate()
     {
-        return  Validation::factory()
+        return Validation::factory()
                     ->label('title', 'Τίτλος')
                     ->label('content', 'Περιεχόμενο')
                     ->rule('title', 'required')
