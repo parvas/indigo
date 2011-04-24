@@ -94,6 +94,8 @@ class Module {
     
     public static function find($item, $type = 'module')
     {
+        self::$_directory = APP . 'modules/';
+        
         if (strpos($item, '/') !== FALSE)
         {
             $segments = explode('/', $item);
@@ -109,14 +111,13 @@ class Module {
         }
         else 
         {
-            // No HMVC, directory path is set to current module
             $segment = $item;
         }
         
         switch ($type)
         {
             case 'model':
-                $filename = self::$_directory . $segment . '_model.php';
+                $filename = self::$_directory . $segment . '/' . $segment . '_model.php';
                 break;
 
             case 'view':
