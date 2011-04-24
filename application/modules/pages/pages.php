@@ -51,6 +51,7 @@ class Pages extends Controller {
         }
 
         Template::instance()
+                ->title(_EDIT_PAGE_)
                 ->render('pages/page_edit', $this->_data);
     }
     
