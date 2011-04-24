@@ -4,6 +4,7 @@ class Pages_Model extends Model {
     
     public function insert(array $input)
     {
+        // Get all data from $_POST
         $data = array(
             'title'         => $input['title'],
             'summary'       => $input['summary'],
@@ -11,10 +12,12 @@ class Pages_Model extends Model {
             'submit_date'   => DB::date()   
                 );
         
+        // Insert into collection
         DB::instance()
                 ->pages
                 ->insert($data);
         
+        // After insert, MongoDB returns _id. Sweet!
         return $data['_id'];
     }
     
@@ -34,18 +37,9 @@ class Pages_Model extends Model {
             'last_edit'     => DB::date()   
                 );
         
-        //$id = $this->_get_id_by_title($prev);
-        
         DB::instance()
                 ->pages
                 ->update(array('_id' => DB::id($id)), 
                          array('$set' => $data));
-    }
-    
-    private function _get_id_by_title($title)
-    {
-        return DB::instance()
-                ->pages
-                ->findOne(array('title' => $title));
     }
 }
