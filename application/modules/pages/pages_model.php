@@ -14,20 +14,18 @@ class Pages_Model extends Model {
         DB::instance()
                 ->pages
                 ->insert($data);
+        
+        return $data['_id'];
     }
     
-    public function get($title)
+    public function get($id)
     {
-        $data = array(
-            'title' => $title
-        );
-        
         return DB::instance()
                 ->pages
-                ->findOne($data);
+                ->findOne(array('_id' => DB::id($id)));
     }
     
-    public function update($prev, array $input)
+    public function update($id, array $input)
     {
         $data = array(
             'title'         => $input['title'],
@@ -36,14 +34,12 @@ class Pages_Model extends Model {
             'last_edit'     => DB::date()   
                 );
         
-        $id = $this->_get_id_by_title($prev);
+        //$id = $this->_get_id_by_title($prev);
         
         DB::instance()
                 ->pages
-                ->update(array('_id' => $id['_id']), 
+                ->update(array('_id' => DB::id($id)), 
                          array('$set' => $data));
-        
-        return $data['title'];
     }
     
     private function _get_id_by_title($title)

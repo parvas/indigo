@@ -14,17 +14,14 @@ class Pages extends Controller {
     
     public function add()
     {
-        Module::factory('contact/add');
-        
         if ($this->_validate())
         {
-            Model::factory('pages')->insert(Input::post());
-            header('Location: ' . WEB . 'pages/add');
+            $new = Model::factory('pages')->insert(Input::post());
+            header('Location: ' . WEB . 'pages/show/' . $new);
         }
         
         Template::instance()
-                ->head('')
-                ->title('Προσθήκη Σελίδας')
+                ->title(_ADD_PAGE_)
                 ->render('pages/page_add', $this->_data);
         
         /*Email::instance()
@@ -34,23 +31,23 @@ class Pages extends Controller {
                 ->send();*/
     }
     
-    public function show($title)
+    public function show($id)
     {
-        $this->_data = Model::factory('pages')->get($title);
+        $this->_data = Model::factory('pages')->get($id);
         
         Template::instance()
-                ->title($title)
+                ->title($this->_data['title'])
                 ->render('pages/page_show', $this->_data);
     }
     
-    public function edit($title)
+    public function edit($id)
     {
-        $this->_data = Model::factory('pages')->get($title);
+        $this->_data = Model::factory('pages')->get($id);
         
         if ($this->_validate())
         {
-            $new = Model::factory('pages')->update($title, Input::post());
-            header('Location: ' . WEB . 'pages/show/' . $new);
+            Model::factory('pages')->update($id, Input::post());
+            header('Location: ' . WEB . 'pages/show/' . $id);
         }
 
         Template::instance()
@@ -59,12 +56,11 @@ class Pages extends Controller {
     
     private function _validate()
     {
-        $validation = Validation::factory()
-                                ->label('title', 'Τίτλος')
-                                ->label('content', 'Περιεχόμενο')
-                                ->rule('title', 'required')
-                                ->rule('content', 'required');
-        
-        return $validation->validate();
+        return  Validation::factory()
+                    ->label('title', 'Τίτλος')
+                    ->label('content', 'Περιεχόμενο')
+                    ->rule('title', 'required')
+                    ->rule('content', 'required')
+                    ->validate();
     }
 }
