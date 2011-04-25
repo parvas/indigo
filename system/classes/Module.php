@@ -87,7 +87,24 @@ class Module {
         $class = ucfirst(self::$_class);
         $instance = new $class;
         self::_add_to_stack();
-        call_user_func_array(array($instance, self::$_method), self::$_params);
+        
+        // pseudo-static method invocation instead of call_user_func()
+        switch (count(self::$_params))
+        {
+            case 0:
+                $instance->{static::$_method}();
+                break;
+            case 1:
+                $instance->{static::$_method}(self::$_params[0]);
+                break;
+            case 2:
+                $instance->{static::$_method}(self::$_params[0], self::$_params[1]);
+                break;
+            case 3:
+                $instance->{static::$_method}(self::$_params[0], self::$_params[1], self::$_params[2]);
+                break;
+        }
+        
         self::_remove_from_stack();
         return $instance;
     }
