@@ -18,7 +18,7 @@ class Pages extends Controller {
         $this->_data['pages'] = $this->_model->get();
 
         $this->_template
-             ->title('Προβολή Όλων')
+             ->title(_SHOW_ALL_)
              ->render('pages/pages_all', $this->_data);
     }
     

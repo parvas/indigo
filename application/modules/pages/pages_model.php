@@ -36,6 +36,8 @@ class Pages_Model extends Model {
             'title'         => $input['title'],
             'summary'       => $input['summary'],
             'content'       => $input['content'],
+            'keywords'      => $input['keywords'],
+            'description'   => $input['description'],
             'last_edit'     => DB::date()   
                 );
         
