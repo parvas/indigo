@@ -2,51 +2,67 @@
 
 class Pages extends Controller {
     
+    private $_model;
+    private $_template;
+    
     public function __construct()
     {
+        $this->_template = Template::instance();
+        $this->_model = Model::factory('pages');
+        
         parent::__construct();
     }
     
     public function index()
     {
-        echo 'Pages Initialized!';
+        $this->_data['pages'] = $this->_model->get();
+
+        $this->_template
+             ->title('Προβολή Όλων')
+             ->render('pages/pages_all', $this->_data);
     }
     
     public function add()
     {
         if ($this->_validate())
         {
-            $new = Model::factory('pages')->insert(Input::post());
+            $new = $this->_model->insert(Input::post());
             header('Location: ' . WEB . 'pages/show/' . $new);
         }
         
-        Template::instance()
-                ->title(_ADD_PAGE_)
-                ->render('pages/page_add', $this->_data);
+        $this->_template
+             ->title(_ADD_PAGE_)
+             ->render('pages/page_add', $this->_data);
     }
     
     public function show($id)
     {
-        $this->_data = Model::factory('pages')->get($id);
+        $this->_data = $this->_model->get($id);
         
-        Template::instance()
-                ->title($this->_data['title'])
-                ->render('pages/page_show', $this->_data);
+        $this->_template
+             ->title($this->_data['title'])
+             ->render('pages/page_show', $this->_data);
     }
     
     public function edit($id)
     {
-        $this->_data = Model::factory('pages')->get($id);
+        $this->_data = $this->_model->get($id);
         
         if ($this->_validate())
         {
-            Model::factory('pages')->update($id, Input::post());
+            $this->_model->update($id, Input::post());
             header('Location: ' . WEB . 'pages/show/' . $id);
         }
 
-        Template::instance()
-                ->title(_EDIT_PAGE_)
-                ->render('pages/page_edit', $this->_data);
+        $this->_template
+             ->title(_EDIT_PAGE_)
+             ->render('pages/page_edit', $this->_data);
+    }
+    
+    public function delete($id)
+    {
+        $this->_model->delete($id);
+        header('Location: ' . WEB . 'pages');
     }
     
     private function _validate()

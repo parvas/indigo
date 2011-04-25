@@ -2,6 +2,13 @@
 
 class Pages_Model extends Model {
     
+    private $_col;
+    
+    public function __construct() 
+    {
+        $this->_col = DB::instance()->pages;
+    }
+    
     public function insert(array $input)
     {
         // Get all data from $_POST
@@ -13,19 +20,17 @@ class Pages_Model extends Model {
                 );
         
         // Insert into collection
-        DB::instance()
-                ->pages
-                ->insert($data);
+        $this->_col->insert($data);
         
         // After insert, MongoDB returns _id. Sweet!
         return $data['_id'];
     }
     
-    public function get($id)
+    public function get($id = null)
     {
-        return DB::instance()
-                ->pages
-                ->findOne(array('_id' => DB::id($id)));
+        return !is_null($id) ?
+                $this->_col->findOne(array('_id' => DB::id($id))) :
+                $this->_col->find();   
     }
     
     public function update($id, array $input)
@@ -37,9 +42,12 @@ class Pages_Model extends Model {
             'last_edit'     => DB::date()   
                 );
         
-        DB::instance()
-                ->pages
-                ->update(array('_id' => DB::id($id)), 
-                         array('$set' => $data));
+        $this->_col->update(array('_id' => DB::id($id)), 
+                            array('$set' => $data));
+    }
+    
+    public function delete($id)
+    {
+        $this->_col->remove(array('_id' => DB::id($id)));
     }
 }
