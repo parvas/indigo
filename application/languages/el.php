@@ -11,3 +11,4 @@ define ('_SUBMIT_',         'Υποβολή');
 define ('_RESET_',          'Καθαρισμός');
 define ('_ADD_PAGE_',       'Προσθήκη Σελίδας');
 define ('_EDIT_PAGE_',      'Επεξεργασία Σελίδας');
+define ('_SHOW_ALL_',       'Προβολή Όλων');

@@ -11,3 +11,4 @@ define ('_SUBMIT_',         'Submit');
 define ('_RESET_',          'Reset');
 define ('_ADD_PAGE_',       'Add Page');
 define ('_EDIT_PAGE_',      'Edit Page');
+define ('_SHOW_ALL_',       'Προβολή Όλων');

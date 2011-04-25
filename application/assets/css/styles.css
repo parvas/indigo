@@ -47,6 +47,24 @@ a {
     color: inherit;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
+thead {
+    background-color: #ccc;
+    font-weight: bold;
+    text-align: center;
+}
+
+.even {
+    background-color: #eee;
+}
+
+td {
+    padding: 2px 3px;
+}
+
 /* change colours to suit your needs */
 ins {
     background-color: #ff9;
