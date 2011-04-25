@@ -82,7 +82,7 @@ class Validation {
      */
     public static function factory()
     {
-        return self::$_instance = new Validation;
+        return static::$_instance = new Validation;
     }
     
     /**
@@ -95,7 +95,7 @@ class Validation {
      */
     public static function current()
     {
-        return self::$_instance;
+        return static::$_instance;
     }
     
     /**
@@ -145,7 +145,7 @@ class Validation {
      * @return  Validation      Current validation object state, 
      *                          so that we can use method chaining.
      */ 
-    public function filter($field, $filter, $params = NULL)
+    public function filter($field, $filter, $params = null)
     {
         // if prerequisites (see docs) are not met, do nothing.
         if (!empty($filter) && (in_array($field, $this->_labels) || ($field === TRUE)))
@@ -181,7 +181,7 @@ class Validation {
      * @return  Validation      Current validation object state, 
      *                          so that we can use method chaining.
      */    
-    public function rule($field, $rule, $params = NULL)
+    public function rule($field, $rule, $params = null)
     {
         // if not all data is present, do nothing
         if (!empty($field) && !empty($rule))
@@ -328,7 +328,7 @@ class Validation {
         }
         else
         {
-            echo 'Invalid parameters.';
+            throw new Exceptions('Invalid validation parameters');
         }        
     }
     
@@ -341,9 +341,9 @@ class Validation {
      * @access  private
      * @param   string $field  Field that failed validation rule.
      * @param   string $rule   Validation rule the above field failed to pass.
-     * @param   mixed $params  Validation rules parameters. NULL by default.
+     * @param   mixed $params  Validation rules parameters.
      */
-    private function _set_error($field, $rule, $params = NULL)
+    private function _set_error($field, $rule, $params = null)
     {
         // if user has set a custom message, copy it and return
         if (isset($this->_custom_errors[$field][$rule]))
@@ -367,7 +367,7 @@ class Validation {
             $params = $swap;
         }
         
-        if ($params === NULL)
+        if (is_null($params))
         {
             $this->_errors[] = sprintf(I18n::instance()->line($rule), 
                                        $this->_labels[$field]);

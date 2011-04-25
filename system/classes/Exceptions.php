@@ -84,7 +84,10 @@ class Exceptions extends Exception {
             'trace'     => $trace
         );
         
-        ob_end_clean();
+        if (ob_get_level() > 1)
+        {
+            ob_clean();
+        }
         
         static::_render_exception(SYSTEM . 'views/error.php', $info);
         exit(1);
@@ -108,7 +111,7 @@ class Exceptions extends Exception {
 
         if (static::$_ob_level > ob_get_level() + 1)
         {
-            ob_end_flush();
+            ob_clean();
         }
         
         $info = array(

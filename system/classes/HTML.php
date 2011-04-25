@@ -53,9 +53,9 @@ class HTML {
      * @uses    parse_attributes  Injects extra attributes.
      * @static
      */
-    public static function a($link, $text, array $atts = NULL)
+    public static function a($link, $text, array $atts = null)
     {
-        return '<a' . self::parse_attributes($atts) . ' href="' . $link . '">' . $text . '</a>';
+        return '<a' . static::parse_attributes($atts) . ' href="' . $link . '">' . $text . '</a>';
     }
     
     /**
@@ -69,9 +69,9 @@ class HTML {
      * @uses    parse_attributes  Injects extra attributes.
      * @static
      */
-    public static function img($src, $alt, array $atts = NULL)
+    public static function img($src, $alt, array $atts = null)
     {
-        return '<img src="' . $src . '" alt="' . $alt . '"' . self::parse_attributes($atts) . ' />';
+        return '<img src="' . $src . '" alt="' . $alt . '"' . static::parse_attributes($atts) . ' />';
     }
     
     /**
@@ -84,9 +84,9 @@ class HTML {
      * @uses    parse_attributes  Injects extra attributes.
      * @static
      */
-    public static function span($text, array $atts = NULL)
+    public static function span($text, array $atts = null)
     {
-        return '<span' . self::parse_attributes($atts) . '>' . $text . '</span>';
+        return '<span' . static::parse_attributes($atts) . '>' . $text . '</span>';
     }
     
     /**
@@ -99,9 +99,9 @@ class HTML {
      * @uses    parse_attributes  Injects extra attributes.
      * @static
      */
-    public static function div($contents, array $atts = NULL)
+    public static function div($contents, array $atts = null)
     {
-        return '<div' . self::parse_attributes($atts) . '>' . $contents . '</div>';
+        return '<div' . static::parse_attributes($atts) . '>' . $contents . '</div>';
     }
     
     /**
@@ -114,9 +114,9 @@ class HTML {
      * @uses    parse_attributes  Injects extra attributes.
      * @static
      */
-    public static function p($contents, array $atts = NULL)
+    public static function p($contents, array $atts = null)
     {
-        return '<p' . self::parse_attributes($atts) . '>' . $contents . '</p>';
+        return '<p' . static::parse_attributes($atts) . '>' . $contents . '</p>';
     }
     
     /**
@@ -132,7 +132,7 @@ class HTML {
      */   
     public static function button($name, $value, array $atts)
     {
-        return '<button' . self::parse_attributes($atts) . '>' . $value . '</button>';
+        return '<button' . static::parse_attributes($atts) . '>' . $value . '</button>';
     }
     
     /**
@@ -149,10 +149,10 @@ class HTML {
      * @see     close_fieldset
      * @static
      */
-    public static function open_fieldset($legend, array $fieldset_atts = NULL, array $legend_atts = NULL)
+    public static function open_fieldset($legend, array $fieldset_atts = null, array $legend_atts = null)
     {
-        return '<fieldset' . self::parse_attributes($fieldset_atts) . 
-               '><legend' . self::parse_attributes($legend_atts) . '>' . $legend . '</legend>';
+        return '<fieldset' . static::parse_attributes($fieldset_atts) . 
+               '><legend' . static::parse_attributes($legend_atts) . '>' . $legend . '</legend>';
     }
     
     /**
@@ -179,10 +179,10 @@ class HTML {
      * @return  string       Extra attributes to be injected in field element.
      * @static
      */
-    public static function parse_attributes(array $atts = NULL)
+    public static function parse_attributes(array $atts = null)
     {
         // need to empty var before check (cause it's static!)
-        self::$_data = '';
+        static::$_data = '';
 
         if (!empty($atts))
         {
@@ -194,15 +194,15 @@ class HTML {
                 }
                 
                 // if attribute is empty, don't print anything
-                if ($value === NULL || $value === '')
+                if ($value === null || $value === '')
                 {
                     continue;    
                 }
                 
-                self::$_data .= ' ' . $att . '="' . $value . '"';
+                static::$_data .= ' ' . $att . '="' . $value . '"';
             }
         }
         
-        return self::$_data;
+        return static::$_data;
     }
 }

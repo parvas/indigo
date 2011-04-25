@@ -6,13 +6,14 @@ class Route {
     
     public static function set()
     {
-        self::$_module = URL::fetch_module();
+        static::$_module = URL::fetch_module();
         
-        if (self::$_module == '')
+        if (static::$_module == '')
         {
-            self::$_module = Config::instance()->get('default_controller');
+            static::$_module = Config::instance()->get('default_controller');
+            header('Location: ' . WEB . static::$_module);
         }
         
-        Module::factory(self::$_module);
+        Module::factory(static::$_module);
     }
 }

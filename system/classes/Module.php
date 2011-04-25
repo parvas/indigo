@@ -27,9 +27,9 @@ class Module {
      */
     public static function factory($module)
     {
-        self::$_class = '';
-        self::$_directory = APP . 'modules/';
-        self::$_method = 'index';
+        static::$_class = '';
+        static::$_directory = APP . 'modules/';
+        static::$_method = 'index';
         
         if (strpos($module, '/') !== FALSE)
         {
@@ -39,79 +39,79 @@ class Module {
             foreach ($segments as $segment)
             {
                 // first check if segment maps to an existing sub-directory
-                if (is_dir(self::$_directory . $segment))
+                if (is_dir(static::$_directory . $segment))
                 {
                     // digging deeper into the filesystem
-                    self::$_directory .= $segment . '/';
-                    self::$_class = $segment;
+                    static::$_directory .= $segment . '/';
+                    static::$_class = $segment;
                     
                     // include parent class
-                    require_once self::$_directory . self::$_class . '.php';
+                    require_once static::$_directory . static::$_class . '.php';
                     // path segment not fully parsed yet, so loop again
                     continue;
                 }
                 
                 // url class segment parsed, but no directory found 
-                if (self::$_class == '')
+                if (static::$_class == '')
                 {
                     Exceptions::error_404(WEB . $module);
                 }
                 // directory (and class) is set, include class file.
-                //require_once self::$_directory . self::$_class . '.php';
+                //require_once static::$_directory . static::$_class . '.php';
                 
                 // time to check if this segment maps to a valid controller method
-                if (self::$_method == 'index' && method_exists(ucfirst(self::$_class), $segment))
+                if (static::$_method == 'index' && method_exists(ucfirst(static::$_class), $segment))
                 {
-                    self::$_method = $segment;
+                    static::$_method = $segment;
                 }
                 else 
                 {
-                    self::$_params[] = $segment;
+                    static::$_params[] = $segment;
                 }
             }
         }
         else
         {
             // no nesting, direct call to <module>/index
-            if (!is_dir(self::$_directory . $module))
+            if (!is_dir(static::$_directory . $module))
             {
                 Exceptions::error_404(WEB . $module);
             }
             
-            self::$_directory .= $module . '/';
-            self::$_class = $module;
+            static::$_directory .= $module . '/';
+            static::$_class = $module;
         }
         
-        require_once self::$_directory . self::$_class . '.php';
+        require_once static::$_directory . static::$_class . '.php';
         
-        $class = ucfirst(self::$_class);
+        $class = ucfirst(static::$_class);
         $instance = new $class;
-        self::_add_to_stack();
+        static::_add_to_stack();
         
         // pseudo-static method invocation instead of call_user_func()
-        switch (count(self::$_params))
+        switch (count(static::$_params))
         {
             case 0:
                 $instance->{static::$_method}();
                 break;
             case 1:
-                $instance->{static::$_method}(self::$_params[0]);
+                $instance->{static::$_method}(static::$_params[0]);
                 break;
             case 2:
-                $instance->{static::$_method}(self::$_params[0], self::$_params[1]);
+                $instance->{static::$_method}(static::$_params[0], static::$_params[1]);
                 break;
             case 3:
-                $instance->{static::$_method}(self::$_params[0], self::$_params[1], self::$_params[2]);
+                $instance->{static::$_method}(static::$_params[0], static::$_params[1], static::$_params[2]);
                 break;
         }
         
-        self::_remove_from_stack();
+        static::_remove_from_stack();
         return $instance;
     }
     
     public static function find($item, $type = 'module')
     {
-        self::$_directory = APP . 'modules/';
+        static::$_directory = APP . 'modules/';
         
         if (strpos($item, '/') !== FALSE)
         {
@@ -119,9 +119,9 @@ class Module {
             
             foreach ($segments as $segment)
             {
-                if (is_dir(self::$_directory . $segment))
+                if (is_dir(static::$_directory . $segment))
                 {
-                    self::$_directory .= $segment . '/';
+                    static::$_directory .= $segment . '/';
                     continue;
                 }
             }
@@ -134,11 +134,11 @@ class Module {
         switch ($type)
         {
             case 'model':
-                $filename = self::$_directory . $segment . '/' . $segment . '_model.php';
+                $filename = static::$_directory . $segment . '/' . $segment . '_model.php';
                 break;
 
             case 'view':
-                $filename = self::$_directory . 'views/' . $segment . '.php';
+                $filename = static::$_directory . 'views/' . $segment . '.php';
                 break;
 
             case 'module':
@@ -158,16 +158,16 @@ class Module {
     
     private static function _add_to_stack()
     {
-        self::$_modules[] = self::$_class;
+        static::$_modules[] = static::$_class;
     }
     
     private static function _remove_from_stack()
     {
-        array_pop(self::$_modules);
+        array_pop(static::$_modules);
     }
     
     public static function is_master()
     {
-        return count(self::$_modules) === 1;
+        return count(static::$_modules) === 1;
     }
 }

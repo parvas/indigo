@@ -12,8 +12,13 @@ class Input {
         return $_POST;
     }
     
-    public static function get($item)
+    public static function get($item = null)
     {
-        return isset($_GET[$item]) ? $_GET[$item] : null;
+        if (!is_null($item))
+        {
+            return isset($_GET[$item]) ? $_GET[$item] : null;
+        }
+        
+        return $_GET;
     }
 }

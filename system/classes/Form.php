@@ -39,7 +39,7 @@ class Form {
      * @see     close
      * @static
      */
-    public static function open(array $atts = NULL)
+    public static function open(array $atts = null)
     {
         // if form submit method is not specified, set it to post
         $atts['method'] = isset($atts['method']) ? $atts['method'] : 'post';
@@ -71,7 +71,7 @@ class Form {
      * @uses    HTML::parse_attributes  Injects extra attributes.
      * @static
      */    
-    public static function submit($value, array $atts = NULL)
+    public static function submit($value, array $atts = null)
     {
         self::$_data = '<input type="submit" value="' . $value . '"';
 
@@ -88,7 +88,7 @@ class Form {
      * @uses    HTML::parse_attributes  Injects extra attributes.
      * @static
      */    
-    public static function reset($value, array $atts = NULL)
+    public static function reset($value, array $atts = null)
     {
         self::$_data = '<input type="reset" value="' . $value . '"';
         
@@ -104,7 +104,7 @@ class Form {
      * @uses    _input        Renders input field.
      * @static
      */
-    public static function text($name, array $atts = NULL)
+    public static function text($name, array $atts = null)
     {
         return self::_input('text', $name, $atts);
     }
@@ -118,7 +118,7 @@ class Form {
      * @uses    _input        Renders input field.
      * @static
      */
-    public static function password($name, array $atts = NULL)
+    public static function password($name, array $atts = null)
     {
         return self::_input('password', $name, $atts);
     }
@@ -132,7 +132,7 @@ class Form {
      * @uses    _input        Renders input field.
      * @static
      */
-    public static function file($name, array $atts = NULL)
+    public static function file($name, array $atts = null)
     {
         return self::_input('file', $name, $atts);
     }
@@ -146,7 +146,7 @@ class Form {
      * @uses    _input        Renders input field.
      * @static
      */
-    public static function hidden($name, array $atts = NULL)
+    public static function hidden($name, array $atts = null)
     {
         return self::_input('hidden', $name, $atts);
     }
@@ -160,7 +160,7 @@ class Form {
      * @uses    _input        Renders input field.
      * @static
      */
-    public static function email($name, array $atts = NULL)
+    public static function email($name, array $atts = null)
     {
         return self::_input('email', $name, $atts);
     }
@@ -177,7 +177,7 @@ class Form {
      * @uses    HTML::parse_attributes  Injects extra attributes.
      * @static
      */ 
-    public static function textarea($name, array $atts = NULL, $value = NULL)
+    public static function textarea($name, array $atts = null, $value = null)
     {
         // trying to set id automatically by name
         $atts['id'] = self::_auto_assign($atts, $name, 'id');
@@ -202,7 +202,7 @@ class Form {
      * @uses    HTML::parse_attributes  Injects extra attributes.
      * @static
      */ 
-    private static function _input($type, $name, array $atts = NULL)
+    private static function _input($type, $name, array $atts = null)
     {
         // trying to set id automatically by name
         $atts['id'] = self::_auto_assign($atts, $name, 'id');
@@ -232,7 +232,7 @@ class Form {
      * @uses    _set_select             Sets default value for field
      * @static
      */ 
-    public static function select($name, array $options, $selected = NULL, array $atts = NULL)
+    public static function select($name, array $options, $selected = null, array $atts = null)
     {
         // trying to set id automatically by name
         $atts['id'] = self::_auto_assign($atts, $name, 'id');
@@ -282,7 +282,7 @@ class Form {
      * @uses    set_select                   Sets default value for field
      * @static
      */ 
-    public static function multiselect($name, array $options, $selected = NULL, array $atts = NULL)
+    public static function multiselect($name, array $options, $selected = null, array $atts = null)
     {
         $atts['multiple'] = 'multiple';
         // extracting id from original field name (e.g. name: select[] -> id: select) 
@@ -305,7 +305,7 @@ class Form {
      * @uses    label                   Produces field label.
      * @static
      */ 
-    public static function checkbox($name, $label, $checked = FALSE, array $atts = NULL)
+    public static function checkbox($name, $label, $checked = FALSE, array $atts = null)
     {
         // so that we can treat groups the same way when re-populating
         $value = self::_auto_assign($atts, $name, 'value');
@@ -334,7 +334,7 @@ class Form {
      * @uses    checkbox                Renders the checkbox group member. 
      * @static
      */ 
-    public static function checkbox_group($name, $id, $value, $label, $checked = FALSE, array $atts = NULL)
+    public static function checkbox_group($name, $id, $value, $label, $checked = FALSE, array $atts = null)
     {
         $atts['id']    = $id;
         $atts['value'] = $value;     
@@ -355,7 +355,7 @@ class Form {
      * @uses    label                   Produces field label.
      * @static
      */ 
-    public static function radio($name, $label, $checked = FALSE, array $atts = NULL)
+    public static function radio($name, $label, $checked = FALSE, array $atts = null)
     {
         // so that we can treat groups the same way when re-populating
         $value = self::_auto_assign($atts, $name, 'value');
@@ -383,7 +383,7 @@ class Form {
      * @uses    radio              Renders the radiobutton group member. 
      * @static
      */ 
-    public static function radio_group($name, $id, $value, $label, $checked = FALSE, array $atts = NULL)
+    public static function radio_group($name, $id, $value, $label, $checked = FALSE, array $atts = null)
     {
         $atts['id']    = $id;
         $atts['value'] = $value;     
@@ -403,7 +403,7 @@ class Form {
      * @return  string             Label HTML element.
      * @static
      */ 
-    public static function label($label, $field, $required = FALSE, array $atts = NULL)
+    public static function label($label, $field, $required = FALSE, array $atts = null)
     {
     	self::$_labels[$field] = $label;
         
@@ -429,7 +429,7 @@ class Form {
      * @return  string           Field value to print.
      * @static 
      */
-    private static function _set_value($field, $default = NULL)
+    private static function _set_value($field, $default = null)
     {
         return (!isset($_POST[$field]) || count($_POST) === 0) ? $default : $_POST[$field]; 
     }
@@ -507,7 +507,7 @@ class Form {
      * @return  boolean          TRUE if to be selected, FALSE otherwise. 
      * @static 
      */
-    private static function _set_select($field, $value, array $default = NULL)
+    private static function _set_select($field, $value, array $default = null)
     {
         if (count($_POST) === 0)
         {

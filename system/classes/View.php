@@ -15,7 +15,7 @@ class View {
     private $_contents;
     private $_data = array();
     
-    public static function factory($view, $data = NULL)
+    public static function factory($view, $data = null)
     {
         return new View($view, $data);
     }

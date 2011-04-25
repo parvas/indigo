@@ -23,7 +23,7 @@ class DB extends Mongo {
     public function __construct() 
     {
         require_once APP . 'config/database.php';
-        self::$_params['database'] = $db['database'];
+        static::$_params['database'] = $db['database'];
         parent::__construct("mongodb://{$db['username']}:{$db['password']}@{$db['hostname']}/{$db['database']}");
     }
     
@@ -35,6 +35,13 @@ class DB extends Mongo {
     {
         return new MongoDate();
     }
+    
+    /**
+     *
+     * @return MongoId 
+     */
+    public static function id($id)
+    {
+        return new MongoId($id);
+    }
 }
-
-?>

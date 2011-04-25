@@ -26,12 +26,12 @@ class Template {
      */
     public static function instance()
     {
-        if (self::$_instance)
+        if (static::$_instance)
         {
-            return self::$_instance;
+            return static::$_instance;
         }
         
-        return self::$_instance = new Template;
+        return static::$_instance = new Template;
     }
     
     

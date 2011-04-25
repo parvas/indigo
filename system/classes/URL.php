@@ -7,32 +7,32 @@ class URL {
     
     public static function fetch_array()
     {
-        self::_explode_fragments();
-        return self::$_fragments;
+        static::_explode_fragments();
+        return static::$_fragments;
     }
     
     public static function fetch()
     {
-        return self::$_uri;
+        return static::$_uri;
     }
     
     public static function fetch_module()
     {
-        return implode('/', array_slice(self::fetch_array(), 2));
+        return implode('/', array_slice(static::fetch_array(), 2));
     }
 	
     private static function _explode_fragments()
     {
-        self::$_uri = $_SERVER['REQUEST_URI'];
+        static::$_uri = $_SERVER['REQUEST_URI'];
         
-        foreach (explode('/', self::$_uri) as $fragment) 
+        foreach (explode('/', static::$_uri) as $fragment) 
         {
-            self::$_fragments[] = $fragment;
+            static::$_fragments[] = $fragment;
         }
     }
     
     public function fragment($part)
     {
-        return isset(self::$_fragments[$part]) ? self::$_fragments[$part] : NULL;
+        return isset(static::$_fragments[$part]) ? static::$_fragments[$part] : null;
     }
 }
