@@ -73,9 +73,9 @@ class Form {
      */    
     public static function submit($value, array $atts = null)
     {
-        self::$_data = '<input type="submit" value="' . $value . '"';
+        static::$_data = '<input type="submit" value="' . $value . '"';
 
-        return self::$_data . HTML::parse_attributes($atts) . ' />';
+        return static::$_data . HTML::parse_attributes($atts) . ' />';
     }
     
     /**
@@ -90,9 +90,9 @@ class Form {
      */    
     public static function reset($value, array $atts = null)
     {
-        self::$_data = '<input type="reset" value="' . $value . '"';
+        static::$_data = '<input type="reset" value="' . $value . '"';
         
-        return self::$_data . HTML::parse_attributes($atts) . ' />';
+        return static::$_data . HTML::parse_attributes($atts) . ' />';
     }
     
     /**
@@ -106,7 +106,7 @@ class Form {
      */
     public static function text($name, array $atts = null)
     {
-        return self::_input('text', $name, $atts);
+        return static::_input('text', $name, $atts);
     }
     
     /**
@@ -120,7 +120,7 @@ class Form {
      */
     public static function password($name, array $atts = null)
     {
-        return self::_input('password', $name, $atts);
+        return static::_input('password', $name, $atts);
     }
     
     /**
@@ -134,7 +134,7 @@ class Form {
      */
     public static function file($name, array $atts = null)
     {
-        return self::_input('file', $name, $atts);
+        return static::_input('file', $name, $atts);
     }
     
     /**
@@ -148,7 +148,7 @@ class Form {
      */
     public static function hidden($name, array $atts = null)
     {
-        return self::_input('hidden', $name, $atts);
+        return static::_input('hidden', $name, $atts);
     }
 	
     /**
@@ -162,7 +162,7 @@ class Form {
      */
     public static function email($name, array $atts = null)
     {
-        return self::_input('email', $name, $atts);
+        return static::_input('email', $name, $atts);
     }
     
     /**
@@ -180,13 +180,13 @@ class Form {
     public static function textarea($name, array $atts = null, $value = null)
     {
         // trying to set id automatically by name
-        $atts['id'] = self::_auto_assign($atts, $name, 'id');
+        $atts['id'] = static::_auto_assign($atts, $name, 'id');
         // trying to set value automatically
-        $value = self::_auto_assign($value, Form::_set_value($name), 'value');
+        $value = static::_auto_assign($value, Form::_set_value($name), 'value');
         
-        self::$_data = '<textarea name="' . $name . '"';
+        static::$_data = '<textarea name="' . $name . '"';
 
-        return self::$_data . HTML::parse_attributes($atts) . '>' . $value . '</textarea>';
+        return static::$_data . HTML::parse_attributes($atts) . '>' . $value . '</textarea>';
     }
     
     /**
@@ -205,7 +205,7 @@ class Form {
     private static function _input($type, $name, array $atts = null)
     {
         // trying to set id automatically by name
-        $atts['id'] = self::_auto_assign($atts, $name, 'id');
+        $atts['id'] = static::_auto_assign($atts, $name, 'id');
         // automatically setting value
         if ($type !== 'file')
         {
@@ -214,9 +214,9 @@ class Form {
                              	Form::_set_value($name);
         }
         
-        self::$_data = '<input type="' . $type . '" name="' . $name . '"';
+        static::$_data = '<input type="' . $type . '" name="' . $name . '"';
 
-        return self::$_data . HTML::parse_attributes($atts) . ' />';
+        return static::$_data . HTML::parse_attributes($atts) . ' />';
     }
     
     /**
@@ -235,8 +235,8 @@ class Form {
     public static function select($name, array $options, $selected = null, array $atts = null)
     {
         // trying to set id automatically by name
-        $atts['id'] = self::_auto_assign($atts, $name, 'id');
-        self::$_data = '<select name="' . $name . '"' . HTML::parse_attributes($atts) . '>';
+        $atts['id'] = static::_auto_assign($atts, $name, 'id');
+        static::$_data = '<select name="' . $name . '"' . HTML::parse_attributes($atts) . '>';
         
         // convert string to array in order to avoid is_array() check inside foreach() loop
         if (!is_null($selected) && !is_array($selected))
@@ -249,24 +249,24 @@ class Form {
             // if option text is an array, we have an optgroup
             if (is_array($text))
             {
-                self::$_data .= '<optgroup label="' . $value . '">';
+                static::$_data .= '<optgroup label="' . $value . '">';
 
                 foreach ($text as $opt_value => $opt_text)
                 {
                     $sel = Form::_set_select($name, $opt_value, $selected) ? ' selected="selected"' : '';
-                    self::$_data .= '<option value="' . $opt_value . '"' . $sel . '>' . $opt_text . '</option>';
+                    static::$_data .= '<option value="' . $opt_value . '"' . $sel . '>' . $opt_text . '</option>';
                 }
 
-                self::$_data .= '</optgroup>';
+                static::$_data .= '</optgroup>';
             }
             else
             {
                 $sel = Form::_set_select($name, $value, $selected) ? ' selected="selected"' : '';
-                self::$_data .= '<option value="' . $value . '"' . $sel . '>' . $text . '</option>';
+                static::$_data .= '<option value="' . $value . '"' . $sel . '>' . $text . '</option>';
             }
         }
         
-        return self::$_data . '</select>';
+        return static::$_data . '</select>';
     }
     
     /**
@@ -286,7 +286,7 @@ class Form {
     {
         $atts['multiple'] = 'multiple';
         // extracting id from original field name (e.g. name: select[] -> id: select) 
-        $atts['id'] = self::_auto_assign($atts, substr($name, 0, -2), 'id');
+        $atts['id'] = static::_auto_assign($atts, substr($name, 0, -2), 'id');
         
         return Form::select($name, $options, $selected, $atts);
     }
@@ -308,14 +308,14 @@ class Form {
     public static function checkbox($name, $label, $checked = FALSE, array $atts = null)
     {
         // so that we can treat groups the same way when re-populating
-        $value = self::_auto_assign($atts, $name, 'value');
+        $value = static::_auto_assign($atts, $name, 'value');
         // trying to set id automatically by name
-        $atts['id'] = self::_auto_assign($atts, $name, 'id');
+        $atts['id'] = static::_auto_assign($atts, $name, 'id');
         
-        self::$_data = '<input type="checkbox" name="' . $name . '"';
-        self::$_data .= Form::_set_checkbox($name, $checked, $value) ? ' checked="checked"' : '';
+        static::$_data = '<input type="checkbox" name="' . $name . '"';
+        static::$_data .= Form::_set_checkbox($name, $checked, $value) ? ' checked="checked"' : '';
         
-        return self::$_data . HTML::parse_attributes($atts) . ' />' . 
+        return static::$_data . HTML::parse_attributes($atts) . ' />' . 
                               Form::label($label, $atts['id'], FALSE, array('class' => 'check'));
     }
     
@@ -358,14 +358,14 @@ class Form {
     public static function radio($name, $label, $checked = FALSE, array $atts = null)
     {
         // so that we can treat groups the same way when re-populating
-        $value = self::_auto_assign($atts, $name, 'value');
+        $value = static::_auto_assign($atts, $name, 'value');
         // trying to set id automatically by name
-        $atts['id'] = self::_auto_assign($atts, $name, 'id');
+        $atts['id'] = static::_auto_assign($atts, $name, 'id');
         
-        self::$_data = '<input type="radio" name="' . $name . '"';
-        self::$_data .= Form::_set_radio($name, $checked, $value) ? ' checked="checked"' : '';
+        static::$_data = '<input type="radio" name="' . $name . '"';
+        static::$_data .= Form::_set_radio($name, $checked, $value) ? ' checked="checked"' : '';
         
-        return self::$_data . HTML::parse_attributes($atts) . ' />' . 
+        return static::$_data . HTML::parse_attributes($atts) . ' />' . 
                               Form::label($label, $atts['id'], FALSE, array('class' => 'check'));
     }
     
@@ -405,7 +405,7 @@ class Form {
      */ 
     public static function label($label, $field, $required = FALSE, array $atts = null)
     {
-    	self::$_labels[$field] = $label;
+    	static::$_labels[$field] = $label;
         
         if ($required === TRUE)
         {
@@ -413,9 +413,9 @@ class Form {
             $atts['title'] = _REQUIRED_;  
         }
         
-        self::$_data = '<label for="' . $field . '"';
-	self::$_data .= HTML::parse_attributes($atts) . '>';
-        return self::$_data . $label . self::$_label_suffix . '</label>';
+        static::$_data = '<label for="' . $field . '"';
+	static::$_data .= HTML::parse_attributes($atts) . '>';
+        return static::$_data . $label . static::$_label_suffix . '</label>';
     }
     
     /**
@@ -455,7 +455,7 @@ class Form {
         }
         
         // do we have a group?
-        $field = self::_extract_array_name($field);
+        $field = static::_extract_array_name($field);
 
         if (isset($_POST[$field]))
         {
@@ -515,7 +515,7 @@ class Form {
         }
         
         // do we have a multiselect?
-        $field = self::_extract_array_name($field);
+        $field = static::_extract_array_name($field);
         
         if (isset($_POST[$field]))
         {
@@ -565,7 +565,7 @@ class Form {
      */
     public static function set_label_suffix($suffix)
     {
-        self::$_label_suffix = $suffix;
+        static::$_label_suffix = $suffix;
     }
 	
     /**
@@ -593,7 +593,7 @@ class Form {
      */
     public static function get_labels()
     {
-        return self::$_labels;
+        return static::$_labels;
     }
 
     /**
