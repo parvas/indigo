@@ -26,8 +26,8 @@ class Pages extends Controller {
     {
         if ($this->_validate())
         {
-            $new = $this->_model->insert(Input::post());
-            header('Location: ' . WEB . 'pages/show/' . $new);
+            $this->_model->insert(Input::post());
+            header('Location: ' . WEB . 'pages');
         }
         
         $this->_template
@@ -51,7 +51,7 @@ class Pages extends Controller {
         if ($this->_validate())
         {
             $this->_model->update($id, Input::post());
-            header('Location: ' . WEB . 'pages/show/' . $id);
+            header('Location: ' . WEB . 'pages');
         }
 
         $this->_template

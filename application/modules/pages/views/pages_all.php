@@ -8,8 +8,6 @@
                 <td><?php echo _SUMMARY_; ?></td>
                 <td><?php echo _CONTENT_; ?></td>
                 <td>Ημ/νία</td>
-                <td></td>
-                <td></td>
             </tr>
         </thead>
         <?php $i = 1; ?>

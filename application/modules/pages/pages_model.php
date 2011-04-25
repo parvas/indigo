@@ -21,9 +21,6 @@ class Pages_Model extends Model {
         
         // Insert into collection
         $this->_col->insert($data);
-        
-        // After insert, MongoDB returns _id. Sweet!
-        return $data['_id'];
     }
     
     public function get($id = null)
