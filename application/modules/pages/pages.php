@@ -36,10 +36,13 @@ class Pages extends Controller {
     }
     
     public function show($id)
-    {
+    {      
         $this->_data = $this->_model->get($id);
+        $this->_check_if_null($this->_data);
         
         $this->_template
+             ->keywords($this->_data['keywords'])
+             ->description($this->_data['description'])
              ->title($this->_data['title'])
              ->render('pages/page_show', $this->_data);
     }
@@ -47,6 +50,7 @@ class Pages extends Controller {
     public function edit($id)
     {
         $this->_data = $this->_model->get($id);
+        $this->_check_if_null($this->_data);
         
         if ($this->_validate())
         {
@@ -73,5 +77,13 @@ class Pages extends Controller {
                     ->rule('title', 'required')
                     ->rule('content', 'required')
                     ->validate();
+    }
+    
+    private function _check_if_null($resource)
+    {
+        if ($resource === null)
+        {
+            Exceptions::error_404(URL::fetch());
+        }
     }
 }

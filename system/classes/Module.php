@@ -20,10 +20,15 @@ class Module {
     private static $_params = array();
 
     /**
+     * Creates a new instance of the requested module and invokes requested method.
+     * New module instances should only be created buy using this method.
+     * Also used for HMVC calls, both internal and external.
      * 
+     *      Usage: Module::factory('controller/method/params');
      * 
-     * @param type $module
-     * @return class 
+     * @access public
+     * @param string $module  The module resource to be loaded.
+     * @static
      */
     public static function factory($module)
     {
@@ -84,6 +89,11 @@ class Module {
         
         require_once static::$_directory . static::$_class . '.php';
         
+        if (static::_check_params() === false)
+        {
+            Exceptions::error_404(WEB . $module);
+        }
+        
         $class = ucfirst(static::$_class);
         $instance = new $class;
         static::_add_to_stack();
@@ -106,9 +116,14 @@ class Module {
         }
         
         static::_remove_from_stack();
-        return $instance;
     }
     
+    /**
+     *
+     * @param type $item
+     * @param type $type
+     * @return string 
+     */
     public static function find($item, $type = 'module')
     {
         static::$_directory = APP . 'modules/';
@@ -156,18 +171,50 @@ class Module {
         return $filename;
     }
     
+    /**
+     * 
+     */
     private static function _add_to_stack()
     {
         static::$_modules[] = static::$_class;
     }
     
+    /**
+     * 
+     */
     private static function _remove_from_stack()
     {
         array_pop(static::$_modules);
     }
     
+    /**
+     *
+     * @return bool 
+     */
     public static function is_master()
     {
         return count(static::$_modules) === 1;
+    }
+    
+    /**
+     * Checks whether the number of parameters provided for the method matches 
+     * the actual parameter number in method definition.
+     * 
+     * This method saves us the touble of checking for parameter validity
+     * inside every controller's methods.
+     * 
+     * @access private
+     * @return bool    true if number of parameters is correct, false otherwise.
+     * @static
+     */    
+    private static function _check_params()
+    {
+        $method = new ReflectionMethod(ucfirst(static::$_class), static::$_method);
+        
+        $min    = $method->getNumberOfRequiredParameters();
+        $max    = $method->getNumberOfParameters();
+        $actual = count(static::$_params);
+        
+        return ($actual < $min || $actual > $max) ? false : true;
     }
 }
