@@ -21,7 +21,7 @@
  */
 define ('SELF',     pathinfo(__FILE__, PATHINFO_BASENAME));
 define ('SERVER',   str_replace(SELF, '', __FILE__));
-define ('WEB',      'http://www.indigo.gr/indigo/');
+define ('WEB',      'http://www.indigo.gr/');
 define ('APP',      SERVER . 'application/');
 define ('SYSTEM',   SERVER . 'system/');
 define ('JS',       WEB . 'application/assets/js/');
