@@ -7,6 +7,11 @@ class Categories extends Controller {
         parent::__construct();
     }
     
+    public function index()
+    {
+        
+    }
+    
     public function add()
     {
         $cmodel = Model::factory('categories');

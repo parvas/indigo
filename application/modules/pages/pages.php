@@ -66,7 +66,7 @@ class Pages extends Controller {
     public function delete($id)
     {
         $this->_model->delete($id);
-        header('Location: ' . WEB . 'pages');
+        header('Location: ' . '/pages');
     }
     
     private function _validate()
@@ -83,7 +83,7 @@ class Pages extends Controller {
     {
         if ($resource === null)
         {
-            Exceptions::error_404(URL::fetch());
+            Exceptions::error_404(URL::fetch_full());
         }
     }
 }

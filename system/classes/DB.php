@@ -11,13 +11,13 @@ class DB extends Mongo {
      */
     public static function instance()
     {
-        if (self::$_instance)
+        if (static::$_instance)
         {
-            return self::$_instance;
+            return static::$_instance;
         }
         
         $mongo = new DB();
-        return self::$_instance = $mongo->{static::$_params['database']};
+        return static::$_instance = $mongo->{static::$_params['database']};
     }
     
     public function __construct() 

@@ -3,8 +3,8 @@
 <body>
 <style>
     .indigo_error {
+        font: 13px Arial;
         margin: 20px;
-        font-size: 13px;
         border: 1px dotted #888;
     }
     

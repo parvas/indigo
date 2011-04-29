@@ -1,7 +1,7 @@
 <style>
     .indigo_error {
         margin: 20px;
-        font-size: 13px;
+        font: 13px Arial;
         border: 1px dotted #888;
     }
     

@@ -59,10 +59,8 @@ class Module {
                 // url class segment parsed, but no directory found 
                 if (static::$_class == '')
                 {
-                    Exceptions::error_404(WEB . $module);
+                    Exceptions::error_404(URL::fetch_full());
                 }
-                // directory (and class) is set, include class file.
-                //require_once static::$_directory . static::$_class . '.php';
                 
                 // time to check if this segment maps to a valid controller method
                 if (static::$_method == 'index' && method_exists(ucfirst(static::$_class), $segment))
@@ -80,20 +78,23 @@ class Module {
             // no nesting, direct call to <module>/index
             if (!is_dir(static::$_directory . $module))
             {
-                Exceptions::error_404(WEB . $module);
+                Exceptions::error_404(URL::fetch_full());
             }
             
             static::$_directory .= $module . '/';
             static::$_class = $module;
         }
         
+        // directory (and class) is set, include class file.
         require_once static::$_directory . static::$_class . '.php';
         
+        // was the number of parameters acceptable?
         if (static::_check_params() === false)
         {
-            Exceptions::error_404(WEB . $module);
+            Exceptions::error_404(URL::fetch_full());
         }
         
+        static::$_module = $module;
         $class = ucfirst(static::$_class);
         $instance = new $class;
         static::_add_to_stack();
@@ -194,6 +195,15 @@ class Module {
     public static function is_master()
     {
         return count(static::$_modules) === 1;
+    }
+    
+    /**
+     *
+     * @return type 
+     */
+    public static function current()
+    {
+        return static::$_module;
     }
     
     /**

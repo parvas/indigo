@@ -2,6 +2,7 @@
 
 <style>
     .e_404 {
+        font-family: Arial;
         margin: 20px;
         border: 1px dotted #888;
     }

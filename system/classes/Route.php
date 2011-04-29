@@ -13,7 +13,7 @@ class Route {
             static::$_module = Config::instance()->get('default_controller');
             header('Location: ' . WEB . static::$_module);
         }
-        
+
         Module::factory(static::$_module);
     }
 }

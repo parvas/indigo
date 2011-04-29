@@ -18,7 +18,7 @@ class URL {
     
     public static function fetch_module()
     {
-        return implode('/', array_slice(static::fetch_array(), 2));
+        return implode('/', array_slice(static::fetch_array(), 1));
     }
 	
     private static function _explode_fragments()
@@ -31,8 +31,13 @@ class URL {
         }
     }
     
-    public function fragment($part)
+    public static function fragment($part)
     {
         return isset(static::$_fragments[$part]) ? static::$_fragments[$part] : null;
+    }
+    
+    public static function fetch_full()
+    {
+        return WEB . substr($_SERVER['REQUEST_URI'], 1);
     }
 }
