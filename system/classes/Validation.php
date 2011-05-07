@@ -3,7 +3,7 @@
 class Validation {
 	
     /*
-     * TODO:
+     * @TODO:
      * 
      * - localeconv for greek decimals
      * - postcode
@@ -51,7 +51,7 @@ class Validation {
      * Array storing $_POST field values at submit time.
      * 
      * @access private
-     * @var    array $_error_messages
+     * @var    array $_post
      */
     private $_post = array();
     
@@ -66,8 +66,8 @@ class Validation {
     /**
      * Stores class instance. 
      * 
-     * @access    private
-     * @staticvar Validation 
+     * @access private
+     * @var    Validation 
      */
     private static $_instance;
     
@@ -208,14 +208,14 @@ class Validation {
          * Hack that essentially allows developer to skip 
          * form submission check when writing a controller method.  
          */
-        if (count($_POST) === 0)
+        if (count(Module::instance()->post()) === 0)
         {
             return false;
         }
         
         // merging filters and rules
         $this->_rules = array_merge_recursive($this->_filters, $this->_rules);
-        
+       
         foreach ($this->_rules as $field => $rules)
         {
             // Mmm... works, but need to find a more elegant solution.
@@ -226,12 +226,12 @@ class Validation {
             // check it *only* if it contains some value
             if (!array_key_exists('matches', $rules) && 
                 !array_key_exists('required', $rules) && 
-                (!isset($_POST[$field]) || $_POST[$field] == ''))
+                (Module::instance()->post($field) === ''))
             {
                 continue;
             }
             
-            $this->_post[$field] = isset($_POST[$field]) ? $_POST[$field] : '';
+            $this->_post[$field] = Module::instance()->post($field);
             
             foreach ($rules as $rule => $params)
             {
@@ -252,12 +252,7 @@ class Validation {
             }
         }
 
-        if (!empty($this->_errors))
-        {
-            return FALSE;
-        }
-        
-        return TRUE;
+		return empty($this->_errors) ? true : false;
     }
     
     /**

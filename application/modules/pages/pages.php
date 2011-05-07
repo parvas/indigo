@@ -2,37 +2,30 @@
 
 class Pages extends Controller {
     
-    private $_model;
-    private $_template;
-    
-    public function __construct()
-    {
-        $this->_template = Template::instance();
-        $this->_model = Model::factory('pages');
-        
-        parent::__construct();
-    }
-    
     public function index()
     {
         $this->_data['pages'] = $this->_model->get();
 
         $this->_template
+             ->keywords('Προβολή σελίδων, indigo')
+             ->description('Λίστα με όλες τις σελίδες του website')
              ->title(_SHOW_ALL_)
-             ->render('pages/pages_all', $this->_data);
+             ->render('pages_all', $this->_data);
     }
     
     public function add()
     {
+        Module::factory('categories/add');
+        
         if ($this->_validate())
         {
-            $this->_model->insert(Input::post());
-            header('Location: ' . WEB . 'pages');
+            $this->_model->insert(Module::instance()->post);
+            URL::redirect('/pages');
         }
-        
+
         $this->_template
              ->title(_ADD_PAGE_)
-             ->render('pages/page_add', $this->_data);
+             ->render('page_add', $this->_data);
     }
     
     public function show($id)
@@ -44,7 +37,7 @@ class Pages extends Controller {
              ->keywords($this->_data['keywords'])
              ->description($this->_data['description'])
              ->title($this->_data['title'])
-             ->render('pages/page_show', $this->_data);
+             ->render('page_show', $this->_data);
     }
     
     public function edit($id)
@@ -55,9 +48,9 @@ class Pages extends Controller {
         if ($this->_validate())
         {
             $this->_model->update($id, Input::post());
-            header('Location: ' . WEB . 'pages');
+            URL::redirect('/pages');
         }
-
+		
         $this->_template
              ->title(_EDIT_PAGE_)
              ->render('pages/page_edit', $this->_data);
@@ -66,7 +59,7 @@ class Pages extends Controller {
     public function delete($id)
     {
         $this->_model->delete($id);
-        header('Location: ' . '/pages');
+        URL::redirect('/pages');
     }
     
     private function _validate()

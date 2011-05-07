@@ -19,7 +19,7 @@
                 <td><?php echo $page['content']; ?></td>
                 <td><?php echo date('Y/m/d H:i:s', $submit->sec); ?></td>
                 <td><?php echo HTML::a(WEB . "pages/edit/{$page['_id']}", 'edit'); ?></td>
-                <td><?php echo HTML::a(WEB . "pages/delete/{$page['_id']}", 'delete'); ?></td>
+                <td><?php echo HTML::a(WEB . "pages/delete/{$page['_id']}", 'delete', array('onclick' => 'return confirm(\'Sure?\')')); ?></td>
             </tr>
         <?php $i++; ?>
         <?php endforeach; ?>

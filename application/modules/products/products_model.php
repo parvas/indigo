@@ -1,6 +1,6 @@
 <?php if (!defined('SYSTEM')) exit('No direct script access allowed');
 
-class Categories_Model extends Model {
+class Products_Model extends Model {
     
     private $_col;
     
@@ -12,9 +12,9 @@ class Categories_Model extends Model {
     public function add(array $input)
     {
         $data = array(
-            'name'         => $input['name'],
-            'description'  => $input['description'],
-            'parent'       => $input['parent']
+            'name'         => $input['product_name'],
+            'description'  => $input['product_description'],
+            'parent'       => $input['product_parent']
                 );
         
         $this->_col->insert($data);
@@ -23,9 +23,9 @@ class Categories_Model extends Model {
     public function update($id, array $input)
     {
         $data = array(
-            'name'          => $input['name'],
-            'description'   => $input['description'],
-            'parent'        => DB::id($input['parent'])
+            'name'          => $input['category_name'],
+            'description'   => $input['category_description'],
+            'parent'        => DB::id($input['parent_category'])
                 );
         
         $this->_col->update(array('_id' => DB::id($id)), 

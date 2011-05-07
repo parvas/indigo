@@ -1,15 +1,5 @@
 <?php defined('SYSTEM') or exit('No direct script access allowed');
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of module
- *
- * @author parvas
- */
 class Module {
     
     private static $_class;
@@ -18,7 +8,21 @@ class Module {
     private static $_module;
     private static $_directory;
     private static $_params = array();
+    private static $_instance;
+    
+    private $_post = array();
+    private $_get = array();
+    private $_files = array();
 
+    /**
+     *
+     * @return Module
+     */
+    public static function instance()
+    {
+        return static::$_instance;
+    }
+    
     /**
      * Creates a new instance of the requested module and invokes requested method.
      * New module instances should only be created buy using this method.
@@ -32,6 +36,7 @@ class Module {
      */
     public static function factory($module)
     {
+        static::$_module = '';
         static::$_class = '';
         static::$_directory = APP . 'modules/';
         static::$_method = 'index';
@@ -49,7 +54,7 @@ class Module {
                     // digging deeper into the filesystem
                     static::$_directory .= $segment . '/';
                     static::$_class = $segment;
-                    
+                    static::$_module .= $segment;
                     // include parent class
                     require_once static::$_directory . static::$_class . '.php';
                     // path segment not fully parsed yet, so loop again
@@ -82,7 +87,7 @@ class Module {
             }
             
             static::$_directory .= $module . '/';
-            static::$_class = $module;
+            static::$_class = static::$_module = $module;
         }
         
         // directory (and class) is set, include class file.
@@ -94,10 +99,10 @@ class Module {
             Exceptions::error_404(URL::fetch_full());
         }
         
-        static::$_module = $module;
         $class = ucfirst(static::$_class);
         $instance = new $class;
         static::_add_to_stack();
+        static::$_instance = new Module();
         
         // pseudo-static method invocation instead of call_user_func()
         switch (count(static::$_params))
@@ -117,6 +122,39 @@ class Module {
         }
         
         static::_remove_from_stack();
+    }
+    
+    private function __construct()
+    {
+        $this->_post = $_POST;
+        $this->_get = $_GET;
+        $this->_files = $_FILES;
+    }
+    
+    public function post($index = null, $value = null)
+    {
+        if (!is_null($index))
+        {
+            if (!is_null($value))
+            {
+                $this->_post[$index] = $value;
+                return;
+            }
+            
+            return isset($this->_post[$index]) ? $this->_post[$index] : '';
+        }
+        
+        return $this->_post;
+    }
+    
+    public function get()
+    {
+        return $this->_get;
+    }
+    
+    public function files()
+    {
+        return $this->_files;
     }
     
     /**
@@ -144,6 +182,11 @@ class Module {
         }
         else 
         {
+            if ($type === 'view')
+            {
+                static::$_directory .= static::current() . '/';
+            }
+            
             $segment = $item;
         }
         
@@ -186,6 +229,7 @@ class Module {
     private static function _remove_from_stack()
     {
         array_pop(static::$_modules);
+        static::$_module = end(static::$_modules);
     }
     
     /**
