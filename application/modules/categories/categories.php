@@ -17,7 +17,7 @@ class Categories extends Controller {
         
         if ($this->_validate())
         {
-            $this->_model->add(Module::instance()->post());
+            $this->_model->add($this->_module->post());
             URL::redirect('/categories');
         }
 
@@ -35,7 +35,7 @@ class Categories extends Controller {
         
         if ($this->_validate())
         {
-            $this->_model->update($id, Input::post());
+            $this->_model->update($id, $this->_module->post());
             URL::redirect('/categories');
         }
 

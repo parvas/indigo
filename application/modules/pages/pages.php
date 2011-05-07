@@ -19,7 +19,7 @@ class Pages extends Controller {
         
         if ($this->_validate())
         {
-            $this->_model->insert(Module::instance()->post);
+            $this->_model->insert($this->_module->post);
             URL::redirect('/pages');
         }
 
@@ -47,7 +47,7 @@ class Pages extends Controller {
         
         if ($this->_validate())
         {
-            $this->_model->update($id, Input::post());
+            $this->_model->update($id, $this->_module->post());
             URL::redirect('/pages');
         }
 		
