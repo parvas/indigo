@@ -4,9 +4,9 @@ class Pages extends Controller {
     
     public function index()
     {
-        $this->_data['pages'] = $this->_model->get();
+        $this->data['pages'] = $this->model->get();
 
-        $this->_template
+        $this->template
              ->keywords('Προβολή σελίδων, indigo')
              ->description('Λίστα με όλες τις σελίδες του website')
              ->title(_SHOW_ALL_)
@@ -19,46 +19,46 @@ class Pages extends Controller {
         
         if ($this->_validate())
         {
-            $this->_model->insert($this->_module->post);
+            $this->model->insert($this->module->post());
             URL::redirect('/pages');
         }
 
-        $this->_template
+        $this->template
              ->title(_ADD_PAGE_)
-             ->render('page_add', $this->_data);
+             ->render('page_add', $this->data);
     }
     
     public function show($id)
     {      
-        $this->_data = $this->_model->get($id);
-        $this->_check_if_null($this->_data);
+        $this->data = $this->model->get($id);
+        $this->_check_if_null($this->data);
         
-        $this->_template
-             ->keywords($this->_data['keywords'])
-             ->description($this->_data['description'])
-             ->title($this->_data['title'])
-             ->render('page_show', $this->_data);
+        $this->template
+             ->keywords($this->data['keywords'])
+             ->description($this->data['description'])
+             ->title($this->data['title'])
+             ->render('page_show', $this->data);
     }
     
     public function edit($id)
     {
-        $this->_data = $this->_model->get($id);
-        $this->_check_if_null($this->_data);
+        $this->data = $this->model->get($id);
+        $this->_check_if_null($this->data);
         
         if ($this->_validate())
         {
-            $this->_model->update($id, $this->_module->post());
+            $this->model->update($id, $this->module->post());
             URL::redirect('/pages');
         }
 		
-        $this->_template
+        $this->template
              ->title(_EDIT_PAGE_)
-             ->render('pages/page_edit', $this->_data);
+             ->render('pages/page_edit', $this->data);
     }
     
     public function delete($id)
     {
-        $this->_model->delete($id);
+        $this->model->delete($id);
         URL::redirect('/pages');
     }
     
