@@ -199,9 +199,9 @@ label {
 }
 
 input[type="text"], input[type="password"], input[type="email"], 
-textarea, select {
+input[type="file"], textarea, select {
     width: 220px;
-    border: 1px solid #aaa;
+    border: 1px solid #aaa !important;
     padding: 3px;
     color: #444;
     font-size: 13px;

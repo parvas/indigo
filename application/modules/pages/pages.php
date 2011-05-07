@@ -10,7 +10,7 @@ class Pages extends Controller {
              ->keywords('Προβολή σελίδων, indigo')
              ->description('Λίστα με όλες τις σελίδες του website')
              ->title(_SHOW_ALL_)
-             ->render('pages_all', $this->_data);
+             ->render('pages_all', $this->data);
     }
     
     public function add()

@@ -3,8 +3,8 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<meta name="author" name="Paraschos Vasiliadis">
-<meta name="generator" name="Indigo PHP Framework">
+<meta name="author" content="Paraschos Vasiliadis">
+<meta name="generator" content="Indigo PHP Framework">
 <title><?php echo $title; ?></title>
 <meta name="description" content="<?php echo $description; ?>">
 <meta name="keywords" content="<?php echo $keywords; ?>">

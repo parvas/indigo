@@ -1,6 +1,6 @@
 <?php if (!defined('SYSTEM')) exit('No direct script access allowed'); ?>
 
-<?php if (count($categories) > 0) : ?>
+<?php if (count($products) > 0) : ?>
     <table>
         <thead>
             <tr>
@@ -9,12 +9,12 @@
             </tr>
         </thead>
         <?php $i = 1; ?>
-        <?php foreach ($categories as $index => $category) : ?>
+        <?php foreach ($products as $index => $product) : ?>
             <tr <?php if ($i % 2 == 0) echo 'class="even"' ?>>
-                <td><?php echo HTML::a(WEB . "categories/show/{$category['_id']}", $category['name']); ?></td>
-                <td><?php echo $category['description']; ?></td>
-                <td><?php echo HTML::a(WEB . "categories/edit/{$category['_id']}", 'edit'); ?></td>
-                <td><?php echo HTML::a(WEB . "categories/delete/{$category['_id']}", 'delete'); ?></td>
+                <td><?php echo HTML::a(WEB . "products/show/{$product['_id']}", $product['name']); ?></td>
+                <td><?php echo $product['description']; ?></td>
+                <td><?php echo HTML::a(WEB . "products/edit/{$product['_id']}", 'edit'); ?></td>
+                <td><?php echo HTML::a(WEB . "products/delete/{$product['_id']}", 'delete'); ?></td>
             </tr>
         <?php $i++; ?>
         <?php endforeach; ?>
