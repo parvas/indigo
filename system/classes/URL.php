@@ -23,8 +23,9 @@ class URL {
 	
     private static function _explode_fragments()
     {
-        static::$_uri = $_SERVER['REQUEST_URI'];
-        
+    	// get rid of trailing slash
+        static::$_uri = rtrim($_SERVER['REQUEST_URI'], '/');
+
         foreach (explode('/', static::$_uri) as $fragment) 
         {
             static::$_fragments[] = $fragment;
@@ -39,5 +40,10 @@ class URL {
     public static function fetch_full()
     {
         return WEB . substr($_SERVER['REQUEST_URI'], 1);
+    }
+    
+    public static function redirect($url)
+    {
+        header("Location: {$url}");
     }
 }
