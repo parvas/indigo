@@ -203,15 +203,13 @@ class Validation {
      */
     public function validate()
     {
-        $keys = array_keys($this->_rules);
-        
         /* 
          * Performs two checks:
          * 1. Has form been submitted?
          * 2. Was validation triggered for the current module?
          * If one of the above fails, then skip validation.
          */
-        if (count(Module::instance()->post()) === 0 || !isset($_POST[$keys[0]]))
+        if (count(Module::instance()->post()) === 0 || $this->is_active() === false)
         {
             return false;
         }
@@ -770,5 +768,19 @@ class Validation {
     private static function _regex($field, $regex)
     {
         return (bool)preg_match($regex, $field);
+    }
+    
+    /**
+     * Checks if current validation instance is actually being run.
+     * Useful in case of HMVC calls.
+     * 
+     * @access public
+     * @return boolean  True if instance is active, false otherwise. 
+     */
+    public function is_active()
+    {
+        $keys = array_keys($this->_rules);
+
+        return isset($_POST[$keys[0]]);
     }
 }

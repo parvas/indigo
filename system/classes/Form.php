@@ -101,7 +101,7 @@ class Form {
      * @param   string $name  Field name.
      * @param   array $atts   Extra field attributes array.
      * @return  string        Text field HTML element.
-     * @uses    _input        Renders input field.
+     * @uses    Form::_input  Renders input field.
      * @static
      */
     public static function text($name, array $atts = null)
@@ -115,7 +115,7 @@ class Form {
      * @param   string $name  Field name.
      * @param   array $atts   Extra field attributes array.
      * @return  string        Password field HTML element.
-     * @uses    _input        Renders input field.
+     * @uses    Form::_input  Renders input field.
      * @static
      */
     public static function password($name, array $atts = null)
@@ -129,7 +129,7 @@ class Form {
      * @param   string $name  Field name.
      * @param   array $atts   Extra field attributes array.
      * @return  string        File field HTML element.
-     * @uses    _input        Renders input field.
+     * @uses    Form::_input  Renders input field.
      * @static
      */
     public static function file($name, array $atts = null)
@@ -143,7 +143,7 @@ class Form {
      * @param   string $name  Field name.
      * @param   array $atts   Extra field attributes array.
      * @return  string        Hidden field HTML element.
-     * @uses    _input        Renders input field.
+     * @uses    Form::_input  Renders input field.
      * @static
      */
     public static function hidden($name, array $atts = null)
@@ -305,7 +305,7 @@ class Form {
      * @uses    label                   Produces field label.
      * @static
      */ 
-    public static function checkbox($name, $label, $checked = FALSE, array $atts = null)
+    public static function checkbox($name, $label, $checked = false, array $atts = null)
     {
         // so that we can treat groups the same way when re-populating
         $value = static::_auto_assign($atts, $name, 'value');
@@ -316,7 +316,7 @@ class Form {
         static::$_data .= Form::_set_checkbox($name, $checked, $value) ? ' checked="checked"' : '';
         
         return static::$_data . HTML::parse_attributes($atts) . ' />' . 
-                              Form::label($label, $atts['id'], FALSE, array('class' => 'check'));
+                              Form::label($label, $atts['id'], false, array('class' => 'check'));
     }
     
     /**
@@ -334,7 +334,7 @@ class Form {
      * @uses    checkbox                Renders the checkbox group member. 
      * @static
      */ 
-    public static function checkbox_group($name, $id, $value, $label, $checked = FALSE, array $atts = null)
+    public static function checkbox_group($name, $id, $value, $label, $checked = false, array $atts = null)
     {
         $atts['id']    = $id;
         $atts['value'] = $value;     
@@ -355,7 +355,7 @@ class Form {
      * @uses    label                   Produces field label.
      * @static
      */ 
-    public static function radio($name, $label, $checked = FALSE, array $atts = null)
+    public static function radio($name, $label, $checked = false, array $atts = null)
     {
         // so that we can treat groups the same way when re-populating
         $value = static::_auto_assign($atts, $name, 'value');
@@ -366,7 +366,7 @@ class Form {
         static::$_data .= Form::_set_radio($name, $checked, $value) ? ' checked="checked"' : '';
         
         return static::$_data . HTML::parse_attributes($atts) . ' />' . 
-                              Form::label($label, $atts['id'], FALSE, array('class' => 'check'));
+                              Form::label($label, $atts['id'], false, array('class' => 'check'));
     }
     
     /**
@@ -383,7 +383,7 @@ class Form {
      * @uses    radio              Renders the radiobutton group member. 
      * @static
      */ 
-    public static function radio_group($name, $id, $value, $label, $checked = FALSE, array $atts = null)
+    public static function radio_group($name, $id, $value, $label, $checked = false, array $atts = null)
     {
         $atts['id']    = $id;
         $atts['value'] = $value;     
@@ -397,24 +397,23 @@ class Form {
      * @access  public  
      * @param   string $label      Label text.
      * @param   string $field      Form field to bind label.
-     * @param   boolean $required  If true, an asterisk is printed indicating 
-	 * 							   the field as required.
+     * @param   boolean $required  If true, an asterisk is printed indicating the field as required.
      * @param   array $atts        Extra label attributes array.
      * @return  string             Label HTML element.
      * @static
      */ 
-    public static function label($label, $field, $required = FALSE, array $atts = null)
+    public static function label($label, $field, $required = false, array $atts = null)
     {
     	static::$_labels[$field] = $label;
         
-        if ($required === TRUE)
+        if ($required === true)
         {
             $label = '<span class="required">*</span>' . $label;  
             $atts['title'] = _REQUIRED_;  
         }
         
         static::$_data = '<label for="' . $field . '"';
-	static::$_data .= HTML::parse_attributes($atts) . '>';
+        static::$_data .= HTML::parse_attributes($atts) . '>';
         return static::$_data . $label . static::$_label_suffix . '</label>';
     }
     
@@ -424,14 +423,21 @@ class Form {
      * 
      * @access  private
      * @param   string $field    Name of field to be re-populated.
-     * @param   string $default  Default field value to be set if no $_POST 
-     * 				 value is found.
+     * @param   string $default  Default field value to be set if no $_POST value is found.
      * @return  string           Field value to print.
      * @static 
      */
     private static function _set_value($field, $default = null)
     {
-        return (!isset($_POST[$field]) || count($_POST) === 0) ? $default : $_POST[$field]; 
+        $active = Validation::current()->is_active();
+        $post = Module::instance()->post();
+        
+        if ($active === false || count($post) === 0)
+        {
+            return $default;
+        }
+        
+        return $post[$field]; 
     }
     
     /**
@@ -439,17 +445,19 @@ class Form {
      * validation failure.
      * 
      * @access  private
-     * @param   string $field     Name of field to be re-populated.
-     * @param   string $value     Field value, contains value only if field is 
-     * 				  group member.
-     * @param   boolean $default  Whether field is checked by default.
-     * @return  boolean           If field is to be checked, an array is 
-     *   			  returned so that it can be parsed. 
+     * @param   string $field           Name of field to be re-populated.
+     * @param   string $value           Field value, contains value only if field is group member.
+     * @param   boolean $default        Whether field is checked by default.
+     * @return  boolean                 If field is to be checked, an array is returned so that it can be parsed. 
+     * @uses    Validation::is_active   
      * @static 
      */
     private static function _set_checkbox($field, $default, $value)
     {
-        if (count($_POST) === 0)
+        $active = Validation::current()->is_active();
+        $post = Module::instance()->post();
+        
+        if ($active === false || count($post) === 0)
         {
             return $default;
         }
@@ -457,15 +465,15 @@ class Form {
         // do we have a group?
         $field = static::_extract_array_name($field);
 
-        if (isset($_POST[$field]))
+        if (isset($post[$field]))
         {
             // if field is a group, search if value is in it
-            return is_array($_POST[$field]) ? 
-                   in_array($value, $_POST[$field]) : 
-                   isset($_POST[$field]);
+            return is_array($post[$field]) ? 
+                   in_array($value, $post[$field]) : 
+                   isset($post[$field]);
         }
         
-        return FALSE;
+        return false;
     }
 	
     /**
@@ -474,26 +482,27 @@ class Form {
      * 
      * @access  private
      * @param   string $field     Name of field to be re-populated.
-     * @param   string $value     Field value, contains value only if field is 
-     *				  group member.
+     * @param   string $value     Field value, contains value only if field is group member.
      * @param   boolean $default  Whether field is checked by default.
-     * @return  boolean           If field is to be checked, an array is 
-     *				  returned so that it can be parsed. 
+     * @return  boolean           If field is to be checked, an array is returned so that it can be parsed. 
      * @static 
      */
     private static function _set_radio($field, $default, $value)
     {
-        if (count($_POST) === 0)
+        $active = Validation::current()->is_active();
+        $post = Module::instance()->post();
+        
+        if ($active === false || count($post) === 0)
         {
             return $default;
         }
 
-        if (isset($_POST[$field]))
+        if (isset($post[$field]))
         {
-                return ($_POST[$field] === $value);
+            return ($post[$field] === $value);
         }
 
-        return FALSE;
+        return false;
     }
     
     /**
@@ -504,12 +513,15 @@ class Form {
      * @param   string $field    Name of field to be re-populated.
      * @param   string $value    Field value.
      * @param   array $default   Pre-selected options array.
-     * @return  boolean          TRUE if to be selected, FALSE otherwise. 
+     * @return  boolean          true if to be selected, false otherwise. 
      * @static 
      */
     private static function _set_select($field, $value, array $default = null)
     {
-        if (count($_POST) === 0)
+        $active = Validation::current()->is_active();
+        $post = Module::instance()->post();
+        
+        if ($active === false || count($post) === 0)
         {
             return (!is_null($default) && in_array($value, $default));
         }
@@ -517,15 +529,15 @@ class Form {
         // do we have a multiselect?
         $field = static::_extract_array_name($field);
         
-        if (isset($_POST[$field]))
+        if (isset($post[$field]))
         {
             // if list is multiselect, search if value is in it
-            return is_array($_POST[$field]) ? 
-                   in_array($value, $_POST[$field]) : 
-                   ($_POST[$field] === $value);
+            return is_array($post[$field]) ? 
+                   in_array($value, $post[$field]) : 
+                   ($post[$field] === $value);
         }
 
-        return FALSE;
+        return false;
     }
 	
     /**
@@ -535,8 +547,7 @@ class Form {
      * So that PHP does not throw annoying notices if this value is not set.
      * 
      * @access  private
-     * @param	array|string $value  Array containing all extra field attributes, 
-     *                               or string with attribute value.
+     * @param	array|string $value  Array containing all extra field attributes, or string with attribute value.
      * @param	string $default      Default value to be assigned as attribute.  
      * @param	string $att          Specific attribute to be set.	
      * @return	string               Requested attribute.
@@ -574,13 +585,12 @@ class Form {
      * 
      * @access  private
      * @param   string $name  String containing variable name.
-     * @return  string        Array name if argument is array, 
-     * 			      the argument itself otherwise.  
+     * @return  string        Array name if argument is array, the argument itself otherwise.  
      * @static
      */
     private static function _extract_array_name($name)
     {
-        return (($pos = strpos($name, '[')) !== FALSE) ? substr($name, $pos) : $name;	
+        return (($pos = strpos($name, '[')) !== false) ? substr($name, $pos) : $name;	
     }
 	
     /**
