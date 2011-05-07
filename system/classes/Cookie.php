@@ -53,7 +53,7 @@ class Cookie {
         
         if (!setcookie($name, $value, $expire, $path, $domain, $secure, $httponly))
         {
-            echo 'Error setting cookie';
+            Log::write('error', "Cookie '{$this->_name}' not set");
         }
     }
     

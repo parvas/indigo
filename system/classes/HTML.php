@@ -30,7 +30,9 @@ class HTML {
         'selected',
         'checked',
         'readonly',
-        'disabled'
+        'disabled',
+        'enctype',
+        'onclick'
     );
     
     /**

@@ -5,10 +5,9 @@ DirectoryIndex index.php
 
 RewriteEngine on
 
-# this removes trailing slash
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} (.*)/$
-RewriteRule ^(.*)/$ $1 [R=301,L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ http://www.indigo.gr/$1 [R=301,L]
 
 # this gets rid of index.php
 RewriteCond %{REQUEST_FILENAME} !-f

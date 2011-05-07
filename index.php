@@ -1,5 +1,5 @@
 <?php
-
+$start = microtime();
 /*
  * set error reporting
  */
@@ -31,3 +31,5 @@ define ('THIRD',    WEB . 'application/assets/third_party/');
 
 // Come on, Indigo!!!
 require_once SYSTEM . 'classes/Bootstrap.php';
+
+echo microtime() - $start;

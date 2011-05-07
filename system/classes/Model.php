@@ -2,14 +2,16 @@
 
 abstract class Model {
     
-    public static function factory($model)
+    public static function factory($model = null)
     {
-       $class = ucfirst($model) . '_Model';
+        if (is_null($model))
+        {
+            $model = Module::current();
+        }
+        
+        $class = ucfirst($model) . '_Model';
+        require_once Module::find($model, 'model');
        
-       require_once Module::find($model, 'model');
-       
-       return new $class;
+        return new $class;
     }
 }
-
-?>

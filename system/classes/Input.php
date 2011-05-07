@@ -21,4 +21,14 @@ class Input {
         
         return $_GET;
     }
+	
+	public static function files($item = null)
+	{
+		if (!is_null($item))
+        {
+            return isset($_FILES[$item]) ? $_FILES[$item] : null;
+        }
+        
+        return $_FILES;
+	}
 }

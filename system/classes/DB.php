@@ -44,4 +44,16 @@ class DB extends Mongo {
     {
         return new MongoId($id);
     }
+    
+    public static function as_array(MongoCursor $cursor)
+    {
+        $data = array();
+        
+        while ($cursor->hasNext())
+        {
+            $data[] = $cursor->getNext();
+        }
+        
+        return $data;
+    }
 }

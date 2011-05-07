@@ -140,7 +140,7 @@ class Module {
                 $this->_post[$index] = $value;
                 return;
             }
-            
+
             return isset($this->_post[$index]) ? $this->_post[$index] : '';
         }
         
@@ -149,11 +149,33 @@ class Module {
     
     public function get()
     {
+        if (!is_null($index))
+        {
+            if (!is_null($value))
+            {
+                $this->_get[$index] = $value;
+                return;
+            }
+            
+            return isset($this->_get[$index]) ? $this->_get[$index] : '';
+        }
+        
         return $this->_get;
     }
     
     public function files()
     {
+        if (!is_null($index))
+        {
+            if (!is_null($value))
+            {
+                $this->_files[$index] = $value;
+                return;
+            }
+            
+            return isset($this->_files[$index]) ? $this->_files[$index] : '';
+        }
+        
         return $this->_files;
     }
     

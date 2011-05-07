@@ -3,14 +3,6 @@
 class Exceptions extends Exception {
     
     /**
-     * Stores current ooutput buffering level.
-     * 
-     * @var int
-     * @static
-     */
-    private static $_ob_level;
-    
-    /**
      * Stores all native PHP error levels.
      * 
      * @var array
@@ -109,10 +101,11 @@ class Exceptions extends Exception {
     {
         $type = static::$_levels[$type];
 
-        if (static::$_ob_level > ob_get_level() + 1)
-        {
-            ob_clean();
-        }
+		if (ob_get_level() > 1)
+		{
+			ob_clean();
+		}
+        
         
         $info = array(
             'type'      => $type,

@@ -10,7 +10,7 @@ abstract class Controller {
      * If needed (HMVC), other models may be initialized 
      * via Model::factory(<module_name>). 
      */
-    protected $_model;
+    protected $model;
     
     /**
      * @access protected
