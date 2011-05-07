@@ -203,25 +203,24 @@ class Validation {
      */
     public function validate()
     {
+        $keys = array_keys($this->_rules);
+        
         /* 
-         * Form has not been submitted, do nothing.
-         * Hack that essentially allows developer to skip 
-         * form submission check when writing a controller method.  
+         * Performs two checks:
+         * 1. Has form been submitted?
+         * 2. Was validation triggered for the current module?
+         * If one of the above fails, then skip validation.
          */
-        if (count(Module::instance()->post()) === 0)
+        if (count(Module::instance()->post()) === 0 || !isset($_POST[$keys[0]]))
         {
             return false;
         }
-        
+
         // merging filters and rules
         $this->_rules = array_merge_recursive($this->_filters, $this->_rules);
        
         foreach ($this->_rules as $field => $rules)
         {
-            // Mmm... works, but need to find a more elegant solution.
-            // Useful for HMVC calls.
-            if (!isset($_POST[$field])) return false;
-            
             // if a field is not required and rule is not "matches" or "required", 
             // check it *only* if it contains some value
             if (!array_key_exists('matches', $rules) && 
