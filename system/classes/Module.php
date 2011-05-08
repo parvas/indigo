@@ -2,21 +2,75 @@
 
 class Module {
     
+    /**
+     * @access private
+     * @var string Module classname. 
+     * @static
+     */
     private static $_class;
-    private static $_method;
-    private static $_modules = array();
-    private static $_module;
-    private static $_directory;
-    private static $_params = array();
-    private static $_instance;
     
+    /**
+     * @access private
+     * @var string Module method name. 
+     * @static
+     */
+    private static $_method;
+    
+    /**
+     * @access private
+     * @var array Loaded modules stack. 
+     * @static
+     */
+    private static $_modules = array();
+    
+    /**
+     * @access private
+     * @var string Current module name. 
+     * @static
+     */
+    private static $_module;
+    
+    /**
+     * @access private
+     * @var string Module directory.
+     * @static
+     */
+    private static $_directory;
+    
+    /**
+     * @access private
+     * @var array Module method parameters. 
+     * @static
+     */
+    private static $_params = array();
+    
+    /**
+     * @access private
+     * @var array Contains $_POST values associated *only* with current module. 
+     * @static
+     */
     private $_post = array();
+    
+    /**
+     * @access private
+     * @var array Contains $_GET values associated *only* with current module.
+     * @static
+     */
     private $_get = array();
+    
+    /**
+     * @access private
+     * @var array Contains $_FILES values associated *only* with current module.
+     * @static
+     */
     private $_files = array();
 
     /**
-     *
-     * @return Module
+     * Returns current module instance.
+     * 
+     * @access public
+     * @return Module  Current module instance.
+     * @static
      */
     public static function instance()
     {
@@ -123,33 +177,63 @@ class Module {
         static::_remove_from_stack();
     }
     
+    /**
+     * Class constructor.
+     * Initializes global arrays.
+     */
     private function __construct()
     {
+        // never use $_POST, $_GET, $_FILES directly!!!
         $this->_post = $_POST;
         $this->_get = $_GET;
         $this->_files = $_FILES;
     }
     
+    /**
+     * Global $_POST array handler. May act as getter or setter.
+     * 
+     * @access public
+     * @return mixed     Returns whole $_POST array, one item of it, or sets a new value. 
+     * @uses   Arr::get  Handles global array request.    
+     */
     public function post($index = null, $value = null)
     {
         return Arr::get($this->_post, $index, $value);
     }
     
+    /**
+     * Global $_GET array handler. May act as getter or setter.
+     * 
+     * @access public
+     * @return mixed     Returns whole $_GET array, one item of it, or sets a new value. 
+     * @uses   Arr::get  Handles global array request.    
+     */
     public function get()
     {
         return Arr::get($this->_get, $index, $value);
     }
     
+    /**
+     * Global $_FILES array handler. May act as getter or setter.
+     * 
+     * @access public
+     * @return mixed     Returns whole $_FILES array, one item of it, or sets a new value. 
+     * @uses   Arr::get  Handles global array request.    
+     */
     public function files()
     {
         return Arr::get($this->_files, $index, $value);
     }
     
     /**
-     *
-     * @param type $item
-     * @param type $type
-     * @return string 
+     * Finds a file associated with a module.
+     * Searches for one of the following: controller, view, model.
+     * 
+     * @access public
+     * @param  string $item  Relative path of file.
+     * @param  string $type  Type of file to be loaded (controller, view, model).
+     * @return string        Absolute path of file to be loaded.
+     * @static  
      */
     public static function find($item, $type = 'module')
     {
@@ -204,15 +288,21 @@ class Module {
     }
     
     /**
+     * Adds a new entry in module stack.
      * 
+     * @access private
+     * @static
      */
     private static function _add_to_stack()
     {
         static::$_modules[] = static::$_class;
     }
     
-    /**
+   /**
+     * Removes entry from module stack when done with module.
      * 
+     * @access private
+     * @static
      */
     private static function _remove_from_stack()
     {
@@ -221,8 +311,11 @@ class Module {
     }
     
     /**
-     *
-     * @return bool 
+     * Checks if current module is the initial request.
+     * 
+     * @access public
+     * @return boolean  True if request is initial, false otherwise.
+     * @static  
      */
     public static function is_master()
     {
@@ -230,8 +323,11 @@ class Module {
     }
     
     /**
-     *
-     * @return type 
+     * Returns name of currently active module.
+     * 
+     * @access public
+     * @return string  Name of currently active module.
+     * @static 
      */
     public static function current()
     {
@@ -246,7 +342,7 @@ class Module {
      * inside every controller's methods.
      * 
      * @access private
-     * @return bool    true if number of parameters is correct, false otherwise.
+     * @return boolean  True if number of parameters is correct, false otherwise.
      * @static
      */    
     private static function _check_params()
