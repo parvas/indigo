@@ -20,7 +20,7 @@ class Module {
      */
     public static function instance()
     {
-        return static::$_instance;
+        return new static;
     }
     
     /**
@@ -102,7 +102,6 @@ class Module {
         $class = ucfirst(static::$_class);
         $instance = new $class;
         static::_add_to_stack();
-        static::$_instance = new Module();
         
         // pseudo-static method invocation instead of call_user_func()
         switch (count(static::$_params))
@@ -133,50 +132,17 @@ class Module {
     
     public function post($index = null, $value = null)
     {
-        if (!is_null($index))
-        {
-            if (!is_null($value))
-            {
-                $this->_post[$index] = $value;
-                return;
-            }
-
-            return isset($this->_post[$index]) ? $this->_post[$index] : '';
-        }
-        
-        return $this->_post;
+        return Arr::get($this->_post, $index, $value);
     }
     
     public function get()
     {
-        if (!is_null($index))
-        {
-            if (!is_null($value))
-            {
-                $this->_get[$index] = $value;
-                return;
-            }
-            
-            return isset($this->_get[$index]) ? $this->_get[$index] : '';
-        }
-        
-        return $this->_get;
+        return Arr::get($this->_get, $index, $value);
     }
     
     public function files()
     {
-        if (!is_null($index))
-        {
-            if (!is_null($value))
-            {
-                $this->_files[$index] = $value;
-                return;
-            }
-            
-            return isset($this->_files[$index]) ? $this->_files[$index] : '';
-        }
-        
-        return $this->_files;
+        return Arr::get($this->_files, $index, $value);
     }
     
     /**
