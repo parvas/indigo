@@ -466,7 +466,7 @@ class Form {
         }
         
         // do we have a group?
-        $field = static::_extract_array_name($field);
+        $field = Text::extract_array_name($field);
 
         if (isset($post[$field]))
         {
@@ -530,7 +530,7 @@ class Form {
         }
         
         // do we have a multiselect?
-        $field = static::_extract_array_name($field);
+        $field = Text::extract_array_name($field);
         
         if (isset($post[$field]))
         {
@@ -580,20 +580,6 @@ class Form {
     public static function set_label_suffix($suffix)
     {
         static::$_label_suffix = $suffix;
-    }
-	
-    /**
-     * Extracts array name from string if supplied argument is in array format,
-     * for example: string: select[] -> name: select.
-     * 
-     * @access  private
-     * @param   string $name  String containing variable name.
-     * @return  string        Array name if argument is array, the argument itself otherwise.  
-     * @static
-     */
-    private static function _extract_array_name($name)
-    {
-        return (($pos = strpos($name, '[')) !== false) ? substr($name, $pos) : $name;	
     }
 	
     /**
