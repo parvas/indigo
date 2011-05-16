@@ -9,7 +9,7 @@ class Text {
             throw new Exceptions('Invalid word limit supplied');
         }
         
-        if ($text <= $limit)
+        if (strlen($text) <= $limit)
         {
             return $text;
         }
@@ -24,12 +24,12 @@ class Text {
             throw new Exceptions('Invalid character limit supplied');
         }
         
-        if ($text <= $limit)
+        if (strlen($text) <= $limit)
         {
             return $text;
         }
         
-        return substr($text, 0, $limit - strlen($end)) . $end;
+        return substr($text, 0, $limit - strlen($end));
     }
     
     /**
