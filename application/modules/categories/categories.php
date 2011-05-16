@@ -23,7 +23,7 @@ class Categories extends Controller {
 
         $this->template
              ->title('Προσθήκη Κατηγορίας')
-             ->render('category_add', $this->data);
+             ->render('category_form', $this->data);
     }
     
     public function edit($id)
@@ -41,7 +41,7 @@ class Categories extends Controller {
 
         $this->template
              ->title(_EDIT_PAGE_)
-             ->render('category_edit', $this->data);
+             ->render('category_form', $this->data);
     }
     
     public function delete($id)
