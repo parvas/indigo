@@ -15,7 +15,7 @@ class Pages extends Controller {
     
     public function add()
     {
-        Module::factory('categories/add');
+        //Module::factory('categories/add');
         
         if ($this->_validate())
         {
@@ -25,7 +25,7 @@ class Pages extends Controller {
 
         $this->template
              ->title(_ADD_PAGE_)
-             ->render('page_add', $this->data);
+             ->render('page_form', $this->data);
     }
     
     public function show($id)
@@ -50,10 +50,10 @@ class Pages extends Controller {
             $this->model->update($id, $this->module->post());
             URL::redirect('/pages');
         }
-		
+
         $this->template
              ->title(_EDIT_PAGE_)
-             ->render('pages/page_edit', $this->data);
+             ->render('page_form', $this->data);
     }
     
     public function delete($id)
@@ -63,7 +63,7 @@ class Pages extends Controller {
     }
     
     private function _validate()
-    {
+    {        
         return Validation::factory()
                     ->label('title', _TITLE_)
                     ->label('content', _CONTENT_)

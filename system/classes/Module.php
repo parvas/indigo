@@ -193,36 +193,36 @@ class Module {
      * Global $_POST array handler. May act as getter or setter.
      * 
      * @access public
-     * @return mixed     Returns whole $_POST array, one item of it, or sets a new value. 
-     * @uses   Arr::get  Handles global array request.    
+     * @return mixed      Returns whole $_POST array, one item of it, or sets a new value. 
+     * @uses   Arr::item  Handles global array request.    
      */
     public function post($index = null, $value = null)
     {
-        return Arr::get($this->_post, $index, $value);
+        return Arr::item($this->_post, $index, $value);
     }
     
     /**
      * Global $_GET array handler. May act as getter or setter.
      * 
      * @access public
-     * @return mixed     Returns whole $_GET array, one item of it, or sets a new value. 
-     * @uses   Arr::get  Handles global array request.    
+     * @return mixed      Returns whole $_GET array, one item of it, or sets a new value. 
+     * @uses   Arr::item  Handles global array request.    
      */
-    public function get()
+    public function get($index = null, $value = null)
     {
-        return Arr::get($this->_get, $index, $value);
+        return Arr::item($this->_get, $index, $value);
     }
     
     /**
      * Global $_FILES array handler. May act as getter or setter.
      * 
      * @access public
-     * @return mixed     Returns whole $_FILES array, one item of it, or sets a new value. 
-     * @uses   Arr::get  Handles global array request.    
+     * @return mixed      Returns whole $_FILES array, one item of it, or sets a new value. 
+     * @uses   Arr::item  Handles global array request.    
      */
-    public function files()
+    public function files($index = null, $value = null)
     {
-        return Arr::get($this->_files, $index, $value);
+        return Arr::item($this->_files, $index, $value);
     }
     
     /**

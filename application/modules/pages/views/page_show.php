@@ -1,3 +1,3 @@
 <?php defined('SYSTEM') or exit('No direct script access allowed'); ?>
-<p><?php echo $summary; ?></p>
-<?php echo $content; ?>
+<p><?php echo Arr::item($data, 'summary'); ?></p>
+<?php echo Arr::item($data, 'content'); ?>

@@ -26,7 +26,7 @@ class Form {
      * @staticvar array $_labels
      */
     private static $_labels = array();
-    
+     
     /**
      * Used to produce an opening form tag.
      * POST method used by default.
@@ -98,29 +98,31 @@ class Form {
     /**
      * Produces a text field.
      * 
-     * @param   string $name  Field name.
-     * @param   array $atts   Extra field attributes array.
-     * @return  string        Text field HTML element.
-     * @uses    Form::_input  Renders input field.
+     * @param   string $name   Field name.
+     * @param   string $value  Field value.
+     * @param   array $atts    Extra field attributes array.
+     * @return  string         Text field HTML element.
+     * @uses    Form::_input   Renders input field.
      * @static
      */
-    public static function text($name, array $atts = null)
+    public static function text($name, $value = null, array $atts = null)
     {
-        return static::_input('text', $name, $atts);
+        return static::_input('text', $name, $value, $atts);
     }
     
     /**
      * Produces a password field.
      * 
-     * @param   string $name  Field name.
-     * @param   array $atts   Extra field attributes array.
-     * @return  string        Password field HTML element.
-     * @uses    Form::_input  Renders input field.
+     * @param   string $name   Field name.
+     * @param   string $value  Field value.
+     * @param   array $atts    Extra field attributes array.
+     * @return  string         Password field HTML element.
+     * @uses    Form::_input   Renders input field.
      * @static
      */
-    public static function password($name, array $atts = null)
+    public static function password($name, $value = null, array $atts = null)
     {
-        return static::_input('password', $name, $atts);
+        return static::_input('password', $name, $value, $atts);
     }
     
     /**
@@ -140,29 +142,31 @@ class Form {
     /**
      * Produces a hidden field.
      * 
-     * @param   string $name  Field name.
-     * @param   array $atts   Extra field attributes array.
-     * @return  string        Hidden field HTML element.
-     * @uses    Form::_input  Renders input field.
+     * @param   string $name   Field name.
+     * @param   string $value  Field value.
+     * @param   array $atts    Extra field attributes array.
+     * @return  string         Hidden field HTML element.
+     * @uses    Form::_input   Renders input field.
      * @static
      */
-    public static function hidden($name, array $atts = null)
+    public static function hidden($name, $value = null, array $atts = null)
     {
-        return static::_input('hidden', $name, $atts);
+        return static::_input('hidden', $name, $value, $atts);
     }
 	
     /**
      * Produces an email field.
      * 
-     * @param   string $name  Field name.
-     * @param   array $atts   Extra field attributes array.
-     * @return  string        Email field HTML element.
-     * @uses    _input        Renders input field.
+     * @param   string $name   Field name.
+     * @param   string $value  Field value.
+     * @param   array $atts    Extra field attributes array.
+     * @return  string         Email field HTML element.
+     * @uses    _input         Renders input field.
      * @static
      */
-    public static function email($name, array $atts = null)
+    public static function email($name, $value = null, array $atts = null)
     {
-        return static::_input('email', $name, $atts);
+        return static::_input('email', $name, $value, $atts);
     }
     
     /**
@@ -177,7 +181,7 @@ class Form {
      * @uses    HTML::parse_attributes  Injects extra attributes.
      * @static
      */ 
-    public static function textarea($name, array $atts = null, $value = null)
+    public static function textarea($name, $value = null, array $atts = null)
     {
         // trying to set id automatically by name
         $atts['id'] = static::_auto_assign($atts, $name, 'id');
@@ -196,22 +200,21 @@ class Form {
      * @access  private 
      * @param   string $type            Field type.
      * @param   string $name            Field name.
+     * @param   string $value           Field value.
      * @param   array $atts             Extra field attributes array.
      * @return  string                  Input HTML element.
      * @uses    _set_value              Sets default value for field.
      * @uses    HTML::parse_attributes  Injects extra attributes.
      * @static
      */ 
-    private static function _input($type, $name, array $atts = null)
+    private static function _input($type, $name, $value, array $atts = null)
     {
         // trying to set id automatically by name
         $atts['id'] = static::_auto_assign($atts, $name, 'id');
         // automatically setting value
         if ($type !== 'file')
         {
-            $atts['value'] = isset($atts['value']) ? 
-                             	Form::_set_value($name, $atts['value']) :
-                             	Form::_set_value($name);
+            $atts['value'] = Form::_set_value($name, $value);
         }
         
         static::$_data = '<input type="' . $type . '" name="' . $name . '"';

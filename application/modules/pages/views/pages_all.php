@@ -1,5 +1,5 @@
 <?php if (!defined('SYSTEM')) exit('No direct script access allowed'); ?>
-
+<?php $pages = Arr::item($data, 'pages'); ?>
 <?php if (count($pages) > 0) : ?>
     <table>
         <thead>

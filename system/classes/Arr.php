@@ -2,7 +2,7 @@
 
 class Arr {
     
-    public static function get(array $arr, $key = null, $value = null)
+    public static function item(array $arr, $key = null, $value = null)
     {
         if (!is_null($key))
         {
@@ -12,7 +12,7 @@ class Arr {
                 return $arr;
             }
             
-            return $arr[$key];
+            return isset($arr[$key]) ? $arr[$key] : null;
         }
         
         return $arr;

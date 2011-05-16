@@ -1,15 +1,5 @@
 <?php defined('SYSTEM') or exit('No direct script access allowed');
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Template
- *
- * @author parvas
- */
 class Template {
     
     private static $_instance;
@@ -111,12 +101,8 @@ class Template {
                     );
         
             extract($this->_data);
-            //ob_start();
-
+            
             require APP . 'views/templates/default.php';
-           // $result = ob_get_contents();
-            //ob_end_clean();
-            //echo $result;
         }
     }
     
