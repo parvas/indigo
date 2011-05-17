@@ -29,7 +29,7 @@ class Text {
             return $text;
         }
         
-        return substr($text, 0, $limit - strlen($end));
+        return substr($text, 0, $limit - strlen($end)) . $end;
     }
     
     /**
