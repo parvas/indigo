@@ -604,6 +604,6 @@ class Form {
      */
     public static function errors()
     {
-        return Validation::current()->errors();
+        return Validation::current()->errors() . Image::instance()->get_errors();
     }
 }
