@@ -1,5 +1,5 @@
 <?php if (!defined('SYSTEM')) exit('No direct script access allowed'); ?>
-
+<?php $products = Arr::item($data, 'products')?>
 <?php if (count($products) > 0) : ?>
     <table>
         <thead>

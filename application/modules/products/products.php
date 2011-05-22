@@ -8,25 +8,28 @@ class Products extends Controller {
 
         $this->template
              ->title(_SHOW_ALL_)
-             ->render('products/products_all', $this->data);
+             ->render('products_all', $this->data);
     }
     
     public function add()
     {
         $this->data['categories'] = Model::factory('categories')->get_categories_select();
-        
-        if ($this->_validate())
-        {
-        	Debug::pre_print(Input::files());
-			
-			Image::instance()->upload(Input::files('product_picture'), 'products');
-            //$this->model->add(Input::post());
-            //header('Location: /products');
-        }
 
+        $image = Image::instance('picture');
+        
+        if ($this->_validate($image))
+        {
+			$image->set_directory('products', true)
+                  ->upload();
+			
+            $this->model->add($this->module->post());
+            URL::redirect('/products');
+        }
+        
+        //Module::factory('products/edit');
         $this->template
              ->title('Προσθήκη Προϊόντος')
-             ->render('products/product_add', $this->data);
+             ->render('product_form', $this->data);
     }
     
     public function edit($id)
@@ -34,23 +37,23 @@ class Products extends Controller {
         $this->data = $this->model->get($id);
         $this->_check_if_null($this->data);
 
-        $this->data['categories'] = $this->model->get_categories_select();
+        $this->data['categories'] = Model::factory('categories')->get_categories_select();
         
         if ($this->_validate())
         {
-            $this->model->update($id, Input::post());
-            header('Location: /products');
+            $this->model->update($id, $this->module->post());
+            URL::redirect('/products');
         }
 
         $this->template
              ->title(_EDIT_PAGE_)
-             ->render('products/product_edit', $this->data);
+             ->render('product_form', $this->data);
     }
     
     public function delete($id)
     {
         $this->model->delete($id);
-        header('Location: /products');
+        URL::redirect('/products');
     }
     
     public function show($id)
@@ -60,18 +63,23 @@ class Products extends Controller {
         
         $this->template
              ->title($this->data['name'])
-             ->render('categories/category_show', $this->data);
+             ->render('product_show', $this->data);
     }
     
-    private function _validate()
+    private function _validate($image)
     {
-        return Validation::factory()
+        $fields = Validation::factory()
                         ->label('name', _NAME_)
                         ->label('description', _DESCRIPTION_)
                         ->rule('name', 'required')
                         ->rule('name', 'max_length', 100)
                         ->rule('description', 'max_length', 300)
                         ->validate();
+
+        $images = $image->set_types(array('jpg', 'png', 'gif'))
+                        ->validate();
+
+        return $fields && $images;
     }
     
     private function _check_if_null($resource)

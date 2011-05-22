@@ -6,15 +6,15 @@ class Products_Model extends Model {
     
     public function __construct() 
     {
-        $this->_col = DB::instance()->categories;
+        $this->_col = DB::instance()->products;
     }
     
     public function add(array $input)
     {
         $data = array(
-            'name'         => $input['product_name'],
-            'description'  => $input['product_description'],
-            'parent'       => $input['product_parent']
+            'name'         => $input['name'],
+            'description'  => $input['description'],
+            'parent'       => $input['parent']
                 );
         
         $this->_col->insert($data);
@@ -23,9 +23,9 @@ class Products_Model extends Model {
     public function update($id, array $input)
     {
         $data = array(
-            'name'          => $input['category_name'],
-            'description'   => $input['category_description'],
-            'parent'        => DB::id($input['parent_category'])
+            'name'          => $input['name'],
+            'description'   => $input['description'],
+            'parent'        => DB::id($input['parent'])
                 );
         
         $this->_col->update(array('_id' => DB::id($id)), 

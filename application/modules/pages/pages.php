@@ -5,7 +5,7 @@ class Pages extends Controller {
     public function index()
     {
         $this->data['pages'] = $this->model->get();
-
+        
         $this->template
              ->keywords('Προβολή σελίδων, indigo')
              ->description('Λίστα με όλες τις σελίδες του website')
@@ -25,7 +25,7 @@ class Pages extends Controller {
 
         $this->template
              ->title(_ADD_PAGE_)
-             ->render('page_form', $this->data);
+             ->render('page_form');
     }
     
     public function show($id)

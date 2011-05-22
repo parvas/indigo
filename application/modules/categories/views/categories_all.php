@@ -1,5 +1,5 @@
 <?php if (!defined('SYSTEM')) exit('No direct script access allowed'); ?>
-
+<?php $categories = Arr::item($data, 'categories'); ?>
 <?php if (count($categories) > 0) : ?>
     <table>
         <thead>
@@ -12,7 +12,7 @@
         <?php foreach ($categories as $index => $category) : ?>
             <tr <?php if ($i % 2 == 0) echo 'class="even"' ?>>
                 <td><?php echo HTML::a(WEB . "categories/show/{$category['_id']}", $category['name']); ?></td>
-                <td><?php echo $category['description']; ?></td>
+                <td><?php echo Text::limit_chars($category['description'], 20); ?></td>
                 <td><?php echo HTML::a(WEB . "categories/edit/{$category['_id']}", 'edit'); ?></td>
                 <td><?php echo HTML::a(WEB . "categories/delete/{$category['_id']}", 'delete', array('onclick' => 'return confirm(\'Sure?\')')); ?></td>
             </tr>
