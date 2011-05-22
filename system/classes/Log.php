@@ -9,8 +9,9 @@ class Log {
      * @static 
      */
     private static $_types = array (
-        'error' => 'ERROR',
-        'debug' => 'DEBUG'
+        'error'     => 'ERROR',
+        'debug'     => 'DEBUG',
+        'warning'   => 'WARNING'
     );
     
     /**
