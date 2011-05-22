@@ -2,67 +2,76 @@
 
 class Image extends File {
 	
-	private $_max_width;
-	private $_max_height;
+	protected $_max_width;
+	protected $_max_height;
 	
-	public static function instance()
+	public static function instance($file = null)
 	{
 		if (static::$_instance)
 		{
 			return static::$_instance;
 		}
-		
-		return static::$_instance = new Image;
+
+        return static::$_instance = new Image($file);
 	} 
 	
-	protected function __construct()
+	protected function __construct($file)
 	{
-		parent::__construct();
+		parent::__construct($file);
 	}
 
-	public function max_dimensions($width, $height)
+	public function set_max_dimensions($width, $height)
 	{
 		$this->_max_width = $width;
 		$this->_max_height = $height;
+        
 		return $this;
 	}
 	
-	public function max_width($width)
+	public function set_max_width($width)
 	{
 		$this->_max_width = $width;
+        
 		return $this;
 	}
 	
-	public function max_height($height)
+	public function set_max_height($height)
 	{
 		$this->_max_height = $height;
+        
 		return $this;
 	}
 	
-	protected function _validate()
+	public function validate()
 	{
-		/*
-		 * $atts[0] : width
-		 * $atts[1] : height
+        if ($this->_pre_validate() === true)
+        {
+            return true;
+        }
+        elseif (count($this->_errors) > 0)
+        {
+            // PHP error, $_FILES array not populated
+            return false;
+        }
+        
+        $this->_validate_size();
+        $this->_validate_types();
+
+        /*
+		 * $atts[0] -> width, $atts[1] -> height
 		 */
-		$atts = getimagesize($this->_file['tmp_name']);
-		
-		if (isset($this->_max_width))
-		{
-			 if ($this->_file[0] >= $this->_max_width)
-			 {
-			     return false;		
-			 }
-		}
-		
-		if (isset($this->_max_height))
-		{
-			 if ($this->_file[1] >= $this->_max_height)
-			 {
-			     return false;		
-			 }
-		}
-		
-		parent::_validate();
+		$atts = @getimagesize($this->_file['tmp_name']);
+        
+        if (isset($this->_max_width) && $atts[0] > $this->_max_width)
+        {
+            $this->_errors[] = sprintf(I18n::instance()->line('invalid_width'), $this->_file['name']);
+        }
+
+        if (isset($this->_max_height) && $atts[1] > $this->_max_height)
+        {
+            $this->_errors[] = sprintf(I18n::instance()->line('invalid_height'), $this->_file['name']);
+        }
+
+        return count($this->_errors) > 0 ? false : true;
 	}
 }
