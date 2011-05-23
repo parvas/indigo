@@ -2,11 +2,11 @@
 
 class File {
 	
-	protected static $_instance;
-	protected $_file = array();
-	protected $_directory;
-	protected $_max_size;
-	protected $_types = array();
+    protected static $_instance;
+    protected $_file = array();
+    protected $_directory;
+    protected $_max_size;
+    protected $_types = array();
     protected $_allowed_mimes = array();
     protected $_errors = array();
     protected $_create_folder = false;
