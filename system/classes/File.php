@@ -109,15 +109,15 @@ class File {
      * @param type $file
      * @return File
      */
-	public static function instance($file = null)
-	{
-		if (static::$_instance)
-		{
-			return static::$_instance;
-		}
+    public static function instance($file = null)
+    {
+        if (static::$_instance)
+        {
+            return static::$_instance;
+        }
 
         return static::$_instance = new File($file);
-	} 
+    } 
 	
 	protected function __construct($file)
 	{
