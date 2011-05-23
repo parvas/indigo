@@ -119,21 +119,21 @@ class File {
         return static::$_instance = new File($file);
     } 
 	
-	protected function __construct($file)
-	{
-		$this->_file = Module::instance()->files($file);
-	}
+    protected function __construct($file)
+    {
+        $this->_file = Module::instance()->files($file);
+    }
 	
-	public function upload()
-	{
+    public function upload()
+    {
         if ($this->_create_folder === true)
         {
             mkdir($this->_directory);
             $this->_create_folder = false;
         }
-        
+
         move_uploaded_file($this->_file['tmp_name'], $this->_directory . $this->_file['name']);
-	}
+    }
     
     public function set_directory($directory, $create_dir = false)
     {
@@ -152,9 +152,9 @@ class File {
                 Exceptions::exception("Directory '{$this->_directory}' does not exist");
             }
         }
-        
+
         // always upload in preconfigured directory
-		$this->_directory = APP . 'assets/uploads/' . $directory . '/';
+        $this->_directory = APP . 'assets/uploads/' . $directory . '/';
         return $this;
     }
 	
