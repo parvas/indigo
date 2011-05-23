@@ -19,7 +19,7 @@ class Products extends Controller {
         
         if ($this->_validate($image))
         {
-			$image->set_directory('products', true)
+            $image->set_directory('products', true)
                   ->upload();
 			
             $this->model->add($this->module->post());
