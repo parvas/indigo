@@ -129,7 +129,7 @@ class File {
         if ($this->_create_folder === true)
         {
             mkdir($this->_directory);
-            $this->_create_folder === false;
+            $this->_create_folder = false;
         }
         
         move_uploaded_file($this->_file['tmp_name'], $this->_directory . $this->_file['name']);
@@ -217,7 +217,6 @@ class File {
         }
         elseif (count($this->_errors) > 0)
         {
-            Debug::alert('OOps');
             // PHP error, $_FILES array not populated
             return false;
         }
