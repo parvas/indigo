@@ -166,7 +166,7 @@ class File {
 	public function max_size($size)
 	{
 		$this->_max_size = $size;
-        
+
 		return $this;
 	}
 	
