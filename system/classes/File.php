@@ -178,52 +178,52 @@ class File {
 	public function set_types(array $types)
 	{
 		//$this->_types = $types;
-        
-        foreach ($types as $type)
-        {
-            if (in_array($type, $this->_allowed_mimes))
-            {
-                Log::write('warning', "Type '{$type}' already passed as allowed type");
-            }
-            
-            if (!isset($this->_mimes[$type]))
-            {
-                throw new Exceptions("Invalid file type passed ({$type})");
-            }
-            
-            if (is_array($this->_mimes[$type]))
-            {
-                foreach ($this->_mimes[$type] as $mime_full)
-                {
-                    $this->_allowed_mimes[] = $mime_full;
-                }
-            }
-            else
-            {
-                $this->_allowed_mimes[] = $this->_mimes[$type];
-            }
 
-            $this->_types[] = $type;
-        }
+		foreach ($types as $type)
+		{
+			if (in_array($type, $this->_allowed_mimes))
+			{
+				Log::write('warning', "Type '{$type}' already passed as allowed type");
+			}
 
-        return $this;
+			if (!isset($this->_mimes[$type]))
+			{
+				throw new Exceptions("Invalid file type passed ({$type})");
+			}
+
+			if (is_array($this->_mimes[$type]))
+			{
+				foreach ($this->_mimes[$type] as $mime_full)
+				{
+					$this->_allowed_mimes[] = $mime_full;
+				}
+			}
+			else
+			{
+				$this->_allowed_mimes[] = $this->_mimes[$type];
+			}
+
+			$this->_types[] = $type;
+		}
+
+		return $this;
 	}
 	
 	public function validate()
 	{
-        if ($this->_pre_validate() === true)
-        {
-            return true;
-        }
-        elseif (count($this->_errors) > 0)
-        {
-            // PHP error, $_FILES array not populated
-            return false;
-        }
-        
-        $this->_validate_size();
-        $this->_validate_types();
-		
+		if ($this->_pre_validate() === true)
+		{
+			return true;
+		}
+		elseif (count($this->_errors) > 0)
+		{
+			// PHP error, $_FILES array not populated
+			return false;
+		}
+
+		$this->_validate_size();
+		$this->_validate_types();
+
 		return count($this->_errors) > 0 ? false : true;
 	}
     
@@ -279,33 +279,33 @@ class File {
         }
     }
     
-    protected function _validate_types()
-    {
-        if (count($this->_types) > 0)
+	protected function _validate_types()
+	{
+		if (count($this->_types) > 0)
 		{
-            // first make the obvious check: check by extension 
+			// first make the obvious check: check by extension 
 			$ext = strtolower(pathinfo($this->_file['name'], PATHINFO_EXTENSION));
-            
-            // no need to take risks; additionally check by file contents 
-            $file_info = new finfo(FILEINFO_MIME_TYPE);
-            $mime_type = $file_info->file($this->_file['tmp_name']);
-            
-            if (!in_array($ext, $this->_types) || !in_array($mime_type, $this->_allowed_mimes))
-            {
-                $this->_errors[] = sprintf(I18n::instance()->line('invalid_filetype'), $this->_file['name']);
-            }
+
+			// no need to take risks; additionally check by file contents 
+			$file_info = new finfo(FILEINFO_MIME_TYPE);
+			$mime_type = $file_info->file($this->_file['tmp_name']);
+
+			if (!in_array($ext, $this->_types) || !in_array($mime_type, $this->_allowed_mimes))
+			{
+				$this->_errors[] = sprintf(I18n::instance()->line('invalid_filetype'), $this->_file['name']);
+			}
 		}
-    }
+	}
     
-    public function get_errors()
-    {
-        $errors = '<ul class="errors">';
-            
-        foreach ($this->_errors as $error)
-        {
-            $errors .= '<li>' . $error . '</li>';
-        }
-            
-        return $errors . '</ul>';
-    }
+	public function get_errors()
+	{
+		$errors = '<ul class="errors">';
+
+		foreach ($this->_errors as $error)
+		{
+			$errors .= '<li>' . $error . '</li>';
+		}
+
+		return $errors . '</ul>';
+	}
 }
