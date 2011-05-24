@@ -29,7 +29,7 @@ class Text {
             return $text;
         }
         
-        return substr($text, 0, $limit - strlen($end)) . $end;
+        return mb_substr($text, 0, $limit - strlen($end), 'UTF-8') . $end;
     }
     
     /**
