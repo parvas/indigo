@@ -31,5 +31,3 @@ class View {
         return $this->_contents;
     }
 }
-
-?>
