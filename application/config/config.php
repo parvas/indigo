@@ -2,5 +2,6 @@
 
 $config = array(
     'default_controller' => 'pages',
-    'default_language'   => 'el'
+    'default_language'   => 'el',
+    'upload_directory'   => APP . 'assets/uploads/'
     );
