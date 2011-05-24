@@ -9,12 +9,12 @@ class Filesystem {
      * @param  string $old  Path to old file name.
      * @param  string $new  Path to new file name.
      * @return boolean      True on successful rename, false otherwise.
-     * @uses   Filesystem::_file_check  Writes into log file in case file is absent (or wrong path passed).
+     * @uses   Filesystem::file_check  Writes into log file in case file is absent (or wrong path passed).
      * @static 
      */
     public static function rename_file($old, $new)
 	{
-        if (static::_file_check($file) === false)
+        if (static::file_check($file) === false)
         {
             return false;
         }
@@ -29,12 +29,12 @@ class Filesystem {
      * @param  string $old  Path to old folder name.
      * @param  string $new  Path to new folder name.
      * @return boolean      True on successful rename, false otherwise.
-     * @uses   Filesystem::_dir_check  Writes into log file in case folder is absent (or wrong path passed).
+     * @uses   Filesystem::dir_check  Writes into log file in case folder is absent (or wrong path passed).
      * @static 
      */
 	public static function rename_folder($old, $new)
 	{
-        if (static::_dir_check($old) === false)
+        if (static::dir_check($old) === false)
         {
             return false;
         }
@@ -48,12 +48,12 @@ class Filesystem {
      * @access public
      * @param  string $file  Path of file to be deleted.
      * @return boolean       True on successful delete, false otherwise.
-     * @uses   Filesystem::_file_check  Writes into log file in case file is absent (or wrong path passed).
+     * @uses   Filesystem::file_check  Writes into log file in case file is absent (or wrong path passed).
      * @static 
      */
 	public static function delete_file($file)
 	{
-        if (static::_file_check($file) === false)
+        if (static::file_check($file) === false)
         {
             return false;
         }
@@ -67,12 +67,12 @@ class Filesystem {
      * @access public
      * @param  string $dir  Path of folder to be deleted.
      * @return boolean      True on successful delete, false otherwise.
-     * @uses   Filesystem::_dir_check  Writes into log file in case file is absent (or wrong path passed).
+     * @uses   Filesystem::dir_check  Writes into log file in case file is absent (or wrong path passed).
      * @static 
      */
     public static function delete_folder($dir)
     {
-        if (static::_dir_check($dir) === false)
+        if (static::dir_check($dir) === false)
         {
             return false;
         }
@@ -143,13 +143,13 @@ class Filesystem {
     /**
      * Checks if directory exists and is writeable.
      * 
-     * @access private
+     * @access public
      * @param  string $dir  Directory path to be checked.
      * @return boolean      True on successful check, false otherwise. 
      * @uses   Log::write   Writes in log file if directory is absent or not writeable.
      * @static
      */
-    private static function _dir_check($dir)
+    public static function dir_check($dir)
     {
         if (!is_dir($dir))
         {
@@ -168,13 +168,13 @@ class Filesystem {
     /**
      * Checks if file exists and is writeable.
      * 
-     * @access private
-     * @param  string $dir  Directory path to be checked.
+     * @access public
+     * @param  string $file  Directory path to be checked.
      * @return boolean      True on successful check, false otherwise. 
      * @uses   Log::write   Writes in log file if file is absent or not writeable.
      * @static
      */
-    private static function _file_check($file)
+    public static function file_check($file)
     {
         if (!file_exists($file))
         {

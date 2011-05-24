@@ -2,14 +2,15 @@
 
 class File {
 	
-    protected static $_instance;
+    protected static $_errors = array();
+    
     protected $_file = array();
     protected $_directory;
     protected $_max_size;
     protected $_types = array();
     protected $_allowed_mimes = array();
-    protected $_errors = array();
     protected $_create_folder = false;
+    protected $_remove_whitespace = false;
     
     protected $_mimes = array(	
             'hqx'	=>	'application/mac-binhex40',
@@ -109,27 +110,33 @@ class File {
      * @param type $file
      * @return File
      */
-    public static function instance($file = null)
+    public static function factory($field, $remove_whitespace = false)
     {
-        if (static::$_instance)
-        {
-            return static::$_instance;
-        }
-
-        return static::$_instance = new File($file);
+        return new File($field, $remove_whitespace);
     } 
 	
-    protected function __construct($file)
+    protected function __construct($field, $remove_whitespace)
     {
-        $this->_file = Module::instance()->files($file);
+        $this->_remove_whitespace = $remove_whitespace;
+        $this->_file = Module::instance()->files($field);
     }
 	
     public function upload()
     {
         if ($this->_create_folder === true)
         {
+            if (Filesystem::dir_check($this->_directory) ===  false)
+            {
+                return false;
+            }
+            
             mkdir($this->_directory);
             $this->_create_folder = false;
+        }
+        
+        if ($this->_remove_whitespace === true)
+        {
+            $this->_file['name'] = preg_replace('/\s+/u', '_', $this->_file['name']);
         }
 
         move_uploaded_file($this->_file['tmp_name'], $this->_directory . $this->_file['name']);
@@ -143,18 +150,14 @@ class File {
             {
                 $this->_create_folder = true;
             }
-            elseif (!is_writable($this->_directory))
+            elseif (Filesystem::dir_check($this->_directory) ===  false)
             {
-                Exceptions::exception("Directory '{$this->_directory}' is not writeable");
-            }
-            else
-            {
-                Exceptions::exception("Directory '{$this->_directory}' does not exist");
+                throw new Exceptions('Directory error during upload. See log for more details.');
             }
         }
 
         // always upload in preconfigured directory
-        $this->_directory = APP . 'assets/uploads/' . $directory . '/';
+        $this->_directory = Config::instance()->get('upload_directory') . $directory . '/';
         return $this;
     }
 	
@@ -163,7 +166,7 @@ class File {
      * @param type $size
      * @return File 
      */
-	public function max_size($size)
+	public function set_max_size($size)
 	{
 		$this->_max_size = $size;
 
@@ -215,7 +218,7 @@ class File {
 		{
 			return true;
 		}
-		elseif (count($this->_errors) > 0)
+		elseif (count(static::$_errors) > 0)
 		{
 			// PHP error, $_FILES array not populated
 			return false;
@@ -224,7 +227,7 @@ class File {
 		$this->_validate_size();
 		$this->_validate_types();
 
-		return count($this->_errors) > 0 ? false : true;
+		return count(static::$_errors) > 0 ? false : true;
 	}
     
     protected function _pre_validate()
@@ -244,28 +247,28 @@ class File {
             case 0:
                 break;
             case 1: 
-                $this->_errors[] = sprintf(I18n::instance()->line('invalid_filesize'), $this->_file['name']);
+                static::$_errors[] = sprintf(I18n::instance()->line('invalid_filesize'), $this->_file['name']);
                 break;
             case 2:
-                $this->_errors[] = $general_error;
+                static::$_errors[] = $general_error;
                 Log::write('error', "File '{$this->_file['name']}' exceeds the maximum size allowed by the submission form");
                 break;
             case 3:
-                $this->_errors[] = $general_error;
+                static::$_errors[] = $general_error;
                 Log::write('error', "File '{$this->_file['name']}' was only partially uploaded");
                 break;
             case 4: 
                 break;
             case 6: 
-                $this->_errors[] = $general_error;
+                static::$_errors[] = $general_error;
                 Log::write('error', 'The temporary folder is missing');
                 break;
             case 7:
-                $this->_errors[] = $general_error;
+                static::$_errors[] = $general_error;
                 Log::write('error', "File '{$this->_file['name']}' could not be written to disk");
                 break;
             case 8: 
-                $this->_errors[] = $general_error; 
+                static::$_errors[] = $general_error; 
                 Log::write('error', "File '{$this->_file['name']}' was stopped by extension");
                 break;
         }
@@ -275,7 +278,7 @@ class File {
     {
         if (isset($this->_max_size) && $this->_file['size'] > $this->_max_size)
         {
-            $this->_errors[] = sprintf(I18n::instance()->line('invalid_filesize'), $this->_file['name']);
+            static::$_errors[] = sprintf(I18n::instance()->line('invalid_filesize'), $this->_file['name']);
         }
     }
     
@@ -292,16 +295,16 @@ class File {
 
 			if (!in_array($ext, $this->_types) || !in_array($mime_type, $this->_allowed_mimes))
 			{
-				$this->_errors[] = sprintf(I18n::instance()->line('invalid_filetype'), $this->_file['name']);
+				static::$_errors[] = sprintf(I18n::instance()->line('invalid_filetype'), $this->_file['name']);
 			}
 		}
 	}
     
-	public function get_errors()
+	public static function get_errors()
 	{
 		$errors = '<ul class="errors">';
 
-		foreach ($this->_errors as $error)
+		foreach (static::$_errors as $error)
 		{
 			$errors .= '<li>' . $error . '</li>';
 		}

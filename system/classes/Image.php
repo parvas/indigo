@@ -4,6 +4,7 @@ class Image extends File {
 	
 	protected $_max_width;
 	protected $_max_height;
+    protected $_thumbnail_dir = 'thumbnails/';
 	
 	public static function instance($file = null)
 	{
@@ -41,6 +42,19 @@ class Image extends File {
         
 		return $this;
 	}
+    
+    public function create_thumbnail($thumb_dir = null)
+    {
+        if (!is_null($thumb_dir))
+        {
+            if (Filesystem::dir_check($this->_directory) ===  false)
+            {
+                throw new Exceptions('Directory error during upload. See log for more details.');
+            }
+            
+            $this->_thumbnail_dir = $thumb_dir;
+        }
+    }
 	
 	public function validate()
 	{
