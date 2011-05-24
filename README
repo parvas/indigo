@@ -5,7 +5,7 @@ Indigo: A Hierarchical MVC PHP 5.3+ Framework
 - Full OOP
 - PHP 5.3+
 - HMVC as easy as it gets (by calling just one method)
-- Dynamic templating system (native PHP for the time being)
+- Native template-driven sites
 - DRY
 - KISS
 - MongoDB powered (no support for a relational database as of now)
