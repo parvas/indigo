@@ -2,14 +2,43 @@
 
 class Email {
     
+    /**
+     * @access private
+     * @var string Stores recepient address 
+     */
     private $_to;
-    private $_subject;
-    private $_message;
-    private static $_instance;
     
     /**
-     *
-     * @return Email 
+     * @access private
+     * @var string Stores message headers 
+     */
+    private $_headers;
+    
+    /**
+     * @access private
+     * @var string Stores message subject
+     */
+    private $_subject;
+    
+    /**
+     * @access private
+     * @var string Stores message body
+     */
+    private $_message;
+    
+    /**
+     * @access private
+     * @var Email Stores class instance 
+     */
+    private static $_instance;
+    
+    
+    /**
+     * Returns an instance of the class.
+     * 
+     * @access public
+     * @return Email  Class instance.
+     * @static 
      */
     public static function instance()
     {
@@ -21,38 +50,91 @@ class Email {
         return self::$_instance = new Email;
     }
     
-    public function __construct() {}
-    
-    public function from()
+    /**
+     * Class constructor.
+     * Initializes headers with mime and content type. 
+     */
+    public function __construct() 
     {
+        $this->_headers = "MIME-Version: 1.0\r\n";
+        $this->_headers .= "Content-type: text/html; charset=utf-8\r\n";
+    }
+    
+    /**
+     * Sets sender address.
+     * 
+     * @access private
+     * @param  string $name   Verbose sender name.
+     * @param  string $email  Sender email address.
+     * @return Email          Class instance.
+     */
+    public function from($name, $email)
+    {
+        $this->_headers .= "From: {$name} <{$email}>\r\n";
+        
         return $this;
     }
     
     /**
-     *
-     * @param type $to
-     * @return Email 
+     * Adds message recipient(s).
+     * 
+     * @access public
+     * @param  string|array $to  Recepient address(es).
+     * @return Email             Class instance.
      */
     public function to($to)
     {
+        if (is_array($to))
+        {
+            $to = implode(',', $to);
+        }
+        
         $this->_to = $to;
         return $this;
     }
     
-    public function cc()
+    /**
+     * Appends carbon copy to message headers.
+     * 
+     * @access public
+     * @param  string|array $cc  Cc address(es).
+     * @return Email             Class instance.
+     */
+    public function cc($cc)
     {
-        return $this;
-    }
-    
-    public function bcc()
-    {
+        if (is_array($cc))
+        {
+            $cc = implode(',', $cc);
+        }
+        
+        $this->_headers .= "Cc: $cc\r\n";
         return $this;
     }
     
     /**
-     *
-     * @param type $subject
-     * @return Email 
+     * Appends blind carbon copy to message headers.
+     * 
+     * @access public
+     * @param  string|array $bcc  Bcc address(es).
+     * @return Email              Class instance.
+     */
+    public function bcc($bcc)
+    {
+        if (is_array($bcc))
+        {
+            $bcc = implode(',', $bcc);
+        }
+        
+        $this->_headers .= "Bcc: $bcc\r\n";
+        return $this;
+    }
+    
+    /**
+     * Appends email subject.
+     * 
+     * @access public
+     * @param string $subject  Message subject.
+     * @return Email           Class instance.
      */
     public function subject($subject)
     {
@@ -61,9 +143,11 @@ class Email {
     }
     
     /**
-     *
-     * @param type $message
-     * @return Email 
+     * Appends email body.
+     * 
+     * @access public
+     * @param  string $message  Message body. 
+     * @return Email            Class instance.
      */
     public function message($message)
     {
@@ -71,13 +155,20 @@ class Email {
         return $this;
     }
     
+    /**
+     * Sends the email using native PHP mail() function.
+     * 
+     * @access public
+     * @return boolean  True if message succesfully sent, false otherwise. 
+     */
     public function send()
     {
-        if (!mail($this->_to, $this->_subject, $this->_message))
+        if (!mail($this->_to, $this->_subject, $this->_message, $this->_headers))
         {
-            echo 'E-mail error.';
+            Log::write('error', 'Problem occured while sending email');
+            return false;
         }
+        
+        return true;
     }
 }
-
-?>
