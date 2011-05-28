@@ -1,26 +1,25 @@
 <?php defined('SYSTEM') or exit('No direct script access allowed');
 
-class Pages_Model extends Model {
+class Projects_Model extends Model {
     
     private $_col;
     
     public function __construct() 
     {
-        $this->_col = DB::instance()->pages;
+        $this->_col = DB::instance()->projects;
     }
     
-    public function insert(array $input)
+    public function add(array $input)
     {
         // Get all data from $_POST
         $data = array(
             'title'         => $input['title'],
-            'summary'       => $input['summary'],
-            'content'       => $input['content'],
+            'description'   => $input['description'],
             'submit_date'   => DB::date()   
                 );
         
         // Insert into collection
-        $this->_col->insert($data);
+        return $this->_col->insert($data);
     }
     
     public function get($id = null)
@@ -34,9 +33,6 @@ class Pages_Model extends Model {
     {
         $data = array(
             'title'         => $input['title'],
-            'summary'       => $input['summary'],
-            'content'       => $input['content'],
-            'keywords'      => $input['keywords'],
             'description'   => $input['description'],
             'last_edit'     => DB::date()   
                 );
