@@ -4,21 +4,15 @@ class Image extends File {
 	
 	protected $_max_width;
 	protected $_max_height;
-    protected $_thumbnail_dir = 'thumbnails/';
 	
-	public static function instance($file = null)
+	public static function factory($field, $remove_whitespace = false)
 	{
-		if (static::$_instance)
-		{
-			return static::$_instance;
-		}
-
-        return static::$_instance = new Image($file);
+        return new Image($field, $remove_whitespace);
 	} 
 	
-	protected function __construct($file)
+	protected function __construct($field, $remove_whitespace)
 	{
-		parent::__construct($file);
+		parent::__construct($field, $remove_whitespace);
 	}
 
 	public function set_max_dimensions($width, $height)
@@ -43,26 +37,13 @@ class Image extends File {
 		return $this;
 	}
     
-    public function create_thumbnail($thumb_dir = null)
-    {
-        if (!is_null($thumb_dir))
-        {
-            if (Filesystem::dir_check($this->_directory) ===  false)
-            {
-                throw new Exceptions('Directory error during upload. See log for more details.');
-            }
-            
-            $this->_thumbnail_dir = $thumb_dir;
-        }
-    }
-	
 	public function validate()
 	{
         if ($this->_pre_validate() === true)
         {
             return true;
         }
-        elseif (count($this->_errors) > 0)
+        elseif (count(static::$_errors) > 0)
         {
             // PHP error, $_FILES array not populated
             return false;
@@ -78,14 +59,14 @@ class Image extends File {
         
         if (isset($this->_max_width) && $atts[0] > $this->_max_width)
         {
-            $this->_errors[] = sprintf(I18n::instance()->line('invalid_width'), $this->_file['name']);
+            static::$_errors[] = sprintf(I18n::instance()->line('invalid_width'), $this->_file['name']);
         }
 
         if (isset($this->_max_height) && $atts[1] > $this->_max_height)
         {
-            $this->_errors[] = sprintf(I18n::instance()->line('invalid_height'), $this->_file['name']);
+            static::$_errors[] = sprintf(I18n::instance()->line('invalid_height'), $this->_file['name']);
         }
 
-        return count($this->_errors) > 0 ? false : true;
+        return count(static::$_errors) > 0 ? false : true;
 	}
 }

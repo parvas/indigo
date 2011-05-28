@@ -125,7 +125,7 @@ class File {
     {
         if ($this->_create_folder === true)
         {
-            if (Filesystem::dir_check($this->_directory) ===  false)
+            if (Filesystem::dir_check($this->_directory) === false)
             {
                 return false;
             }
@@ -214,7 +214,7 @@ class File {
 	
 	public function validate()
 	{
-		if ($this->_pre_validate() === true)
+		if ($this->_pre_validate() === true || Validation::current()->is_active() === false)
 		{
 			return true;
 		}
@@ -226,7 +226,7 @@ class File {
 
 		$this->_validate_size();
 		$this->_validate_types();
-
+        
 		return count(static::$_errors) > 0 ? false : true;
 	}
     
@@ -302,6 +302,11 @@ class File {
     
 	public static function get_errors()
 	{
+        if (count(static::$_errors) === 0 || Validation::current()->is_active() === false)
+        {
+            return;
+        }
+        
 		$errors = '<ul class="errors">';
 
 		foreach (static::$_errors as $error)
