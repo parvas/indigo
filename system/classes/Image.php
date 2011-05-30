@@ -57,14 +57,16 @@ class Image extends File {
 		 */
 		$atts = @getimagesize($this->_file['tmp_name']);
         
+		// check width
         if (isset($this->_max_width) && $atts[0] > $this->_max_width)
         {
-            static::$_errors[] = sprintf(I18n::instance()->line('invalid_width'), $this->_file['name']);
+            static::$_errors[$this->_file['name']] = sprintf(I18n::instance()->line('invalid_width'), $this->_file['name']);
         }
 
+		// check height
         if (isset($this->_max_height) && $atts[1] > $this->_max_height)
         {
-            static::$_errors[] = sprintf(I18n::instance()->line('invalid_height'), $this->_file['name']);
+            static::$_errors[$this->_file['name']] = sprintf(I18n::instance()->line('invalid_height'), $this->_file['name']);
         }
 
         return count(static::$_errors) > 0 ? false : true;

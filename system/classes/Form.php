@@ -3,29 +3,32 @@
 class Form {
 	
     /**
-     * Used as the return string of the class.
-     * 
-     * @access    private
-     * @staticvar string $_data
+     * @access private
+     * @var string Used as the return string of the class.
+	 * @static
      */
     private static $_data;
 	
     /**
-     * Label suffix.
-     *  
-     * @access    private
-     * @staticvar string $_label_suffix
+     * @access private
+     * @var string Label suffix.
+	 * @static
      */
     private static $_label_suffix = '';
 	
     /**
-     * Array containing form labels, 
-     * to be later used by form validation.
-     * 
-     * @access    private
-     * @staticvar array $_labels
+     * @access private
+     * @var array Contains form labels, to be later used by form validation.
+	 * @static
      */
     private static $_labels = array();
+	
+	/**
+	 * @access private
+	 * @var string Contains form errors
+	 * @static
+	 */
+	private static $_errors = '';
      
     /**
      * Used to produce an opening form tag.
@@ -45,6 +48,26 @@ class Form {
         $atts['method'] = isset($atts['method']) ? $atts['method'] : 'post';
         
         return '<form' . HTML::parse_attributes($atts) . '>';
+    }
+    
+    /**
+     * Used to produce a multipart opening form tag, so that we can work with file uploads.
+     * POST method used by default.
+     * Must always be followed by close_form().
+     * 
+     * @access  public
+     * @param   array $atts             Submit redirection page.
+     * @return  string                  Extra field attributes array.
+     * @uses    HTML::parse_attributes  Injects extra attributes.
+     * @see     close
+     * @static
+     */
+    public static function open_multipart(array $atts = null)
+    {
+        // if form submit method is not specified, set it to post
+        $atts['method'] = isset($atts['method']) ? $atts['method'] : 'post';
+        
+        return '<form enctype="multipart/form-data"' . HTML::parse_attributes($atts) . '>';
     }
     
     /**
@@ -411,7 +434,7 @@ class Form {
         
         if ($required === true)
         {
-            $label = '<span class="required">*</span>' . $label;  
+            $label .= '<span class="required">*</span>';  
             $atts['title'] = _REQUIRED_;  
         }
         
@@ -444,8 +467,7 @@ class Form {
     }
     
     /**
-     * Re-populates a checkbox field with its $_POST value in case of 
-     * validation failure.
+     * Re-populates a checkbox field with its $_POST value in case of validation failure.
      * 
      * @access  private
      * @param   string $field           Name of field to be re-populated.
@@ -509,8 +531,7 @@ class Form {
     }
     
     /**
-     * Re-populates a select field with its $_POST value in case of 
-     * validation failure.
+     * Re-populates a select field with its $_POST value in case of validation failure.
      * 
      * @access  private
      * @param   string $field    Name of field to be re-populated.
@@ -583,8 +604,7 @@ class Form {
     }
 	
     /**
-     * Returns all labels set in this form (so there is no need to 
-     * re-set them for validation).
+     * Returns all labels set in this form (so there is no need to re-set them for validation).
      * 
      * @access  public
      * @return  array $_labels  Array containing all form labels.  
@@ -602,8 +622,32 @@ class Form {
      * @return Validation
      * @static 
      */
-    public static function errors()
+    public static function errors($field = null)
     {
-        return Validation::current()->errors() . Image::get_errors();
+    	static::$_errors = Validation::current()->errors($field); 
+		static::$_errors = array_merge(static::$_errors, File::get_errors($field));
+		static::$_errors = array_merge(static::$_errors, Image::get_errors($field));
+		
+		$errors = '';
+		
+		if (is_null($field))
+		{
+			foreach (static::$_errors as $field => $err)
+			{
+				foreach ($err as $e)
+				{
+					$errors .= '<div class="errors">' . $e . '</div>';
+				}
+			}
+			
+			return $errors;
+		}
+		
+		foreach (static::$_errors as $field => $error)
+		{
+			$errors .= '<div class="errors">' . $error . '</div>';
+		}
+		
+		return $errors;
     }
 }

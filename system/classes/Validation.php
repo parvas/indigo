@@ -115,8 +115,7 @@ class Validation {
      * @access  public  
      * @param   string $field  Field name.
      * @param   string $label  Label to be assigned.
-     * @return  Validation     Current validation object state, 
-     *                         so that we can use method chaining.
+     * @return  Validation     Current validation object state.
      */ 
     public function label($field, $label)
     {
@@ -128,6 +127,25 @@ class Validation {
         
         return $this;
     }
+	
+	/**
+     * Accepts an associative array of labels and calls label() for each pair
+	 * so that we can set them all at once.
+     * 
+     * @access  public  
+     * @param   array $fields  Associative array of field names/labels.
+     * @return  Validation     Current validation object state.
+	 * @uses	Validation::labels()
+     */ 
+	public function labels(array $fields)
+	{
+		foreach ($fields as $field => $label)
+		{
+			$this->label($field, $label);
+		}
+		
+		return $this;
+	}
     
     /**
      * Sets or appends a filter for a field, preparing $_POST data before validation.
@@ -253,21 +271,19 @@ class Validation {
     }
     
     /**
-     * Displays validation errors as unordered list.
+     * Displays validation errors for a single field or whole form.
      * 
      * @access  private
      * @return  $string  Error string as unordered list.
      */
-    public function errors()
+    public function errors($field = null)
     {
-        $errors = '<ul class="errors">';
-            
-        foreach ($this->_errors as $error)
-        {
-            $errors .= '<li>' . $error . '</li>';
-        }
-            
-        return $errors . '</ul>';
+    	if (is_null($field))
+		{
+        	return $this->_errors;
+		}
+		
+		return isset($this->_errors[$field]) ? $this->_errors[$field] : array();
     }
     
     /**
@@ -340,7 +356,7 @@ class Validation {
         // if user has set a custom message, copy it and return
         if (isset($this->_custom_errors[$field][$rule]))
         {
-            $this->_errors[] = $this->_custom_errors[$field][$rule];
+            $this->_errors[$field][] = $this->_custom_errors[$field][$rule];
             
             return;
         }
@@ -361,21 +377,21 @@ class Validation {
         
         if (is_null($params))
         {
-            $this->_errors[] = sprintf(I18n::instance()->line($rule), 
-                                       $this->_labels[$field]);
+            $this->_errors[$field][] = sprintf(I18n::instance()->line($rule), 
+                                       			$this->_labels[$field]);
         }
         elseif (is_array($params))
         {
-            $this->_errors[] = sprintf(I18n::instance()->line($rule), 
-                                       $this->_labels[$field], 
-                                       $params[0], 
-                                       $params[1]);
+            $this->_errors[$field][] = sprintf(I18n::instance()->line($rule), 
+                                       			$this->_labels[$field], 
+                                       			$params[0], 
+                                       			$params[1]);
         }
         else
         {
-            $this->_errors[] = sprintf(I18n::instance()->line($rule), 
-                                       $this->_labels[$field], 
-                                       $params);            
+            $this->_errors[$field][] = sprintf(I18n::instance()->line($rule), 
+                                       			$this->_labels[$field], 
+                                       			$params);            
         }
     }
     
@@ -391,7 +407,7 @@ class Validation {
     {
         $this->_custom_errors[$field][$rule] = $message;
     }
-
+    
     /**
      * Checks if field is empty.
      * 

@@ -1,17 +1,59 @@
 <?php if (!defined('SYSTEM')) exit('No direct script access allowed');
 
 class File {
-	
+	/**
+	 * @access protected
+	 * @var array Stores validation errors
+	 * @static
+	 */
     protected static $_errors = array();
     
+	/**
+	 * @access protected
+	 * @var array Stores $_FILE info.
+	 */
     protected $_file = array();
+    
+    /**
+	 * @access protected
+	 * @var string Stores upload folder path.
+	 */
     protected $_directory;
+    
+    /**
+	 * @access protected
+	 * @var int Stores maximum upload filesize. 
+	 */
     protected $_max_size;
+    
+    /**
+	 * @access protected
+	 * @var array Stores allowed upload filetypes.
+	 */
     protected $_types = array();
+    
+    /**
+	 * @access protected
+	 * @var array Stores allowed mime types.
+	 */
     protected $_allowed_mimes = array();
+    
+    /**
+	 * @access protected
+	 * @var boolean Whether to create a folder if it is missing.
+	 */
     protected $_create_folder = false;
+	
+	/**
+	 * @access protected
+	 * @var boolean Whether to remove whitespace from uploaded file name.
+	 */
     protected $_remove_whitespace = false;
     
+	/**
+	 * @access protected
+	 * @var array Most common mime types.
+	 */
     protected $_mimes = array(	
             'hqx'	=>	'application/mac-binhex40',
             'cpt'	=>	'application/mac-compactpro',
@@ -106,44 +148,97 @@ class File {
 	);
 	
     /**
-     *
-     * @param type $file
-     * @return File
+     * Creates a new class instance.
+	 * 
+	 * @access public
+     * @param  string $field	 		   Form upload field.
+     * @param  boolean $remove_whitespace  Whether to replace blanks with underscores.
+	 * @return File  					   Current class object.
      */
-    public static function factory($field, $remove_whitespace = false)
+    public static function factory($field, $remove_whitespace = true)
     {
         return new File($field, $remove_whitespace);
     } 
 	
+	/**
+	 * Class constructor.
+	 * Sets blank removal and field name.
+	 * 
+	 * @access protected
+	 * @param  string $field	 		   Form upload field.
+     * @param  boolean $remove_whitespace  Whether to replace blanks with underscores.
+	 */
     protected function __construct($field, $remove_whitespace)
     {
         $this->_remove_whitespace = $remove_whitespace;
         $this->_file = Module::instance()->files($field);
     }
 	
+	/**
+	 * Uploads a file on filesystem.
+	 * 
+	 * @access public
+	 * @return boolean True on successful upload, false otherwise.
+	 * @uses Log::write For various error logs. 
+	 */
     public function upload()
     {
-        if ($this->_create_folder === true)
-        {
-            if (Filesystem::dir_check($this->_directory) === false)
-            {
-                return false;
-            }
-            
-            mkdir($this->_directory);
-            $this->_create_folder = false;
-        }
+    	// case a: directory missing
+    	if (!is_dir($this->_directory))
+		{
+			// directory create not requested, upload cannot continue
+			if ($this->_create_folder === false)
+        	{
+        		Log::write('error', "Directory '{$this->_directory}' does not exist and folder creation not requested.");
+				return false;
+        	}
+			
+			// create folder	
+			mkdir($this->_directory);
+	        $this->_create_folder = false;
+		}
         
+		// permissions issue
+		if (!is_writable($this->_directory))
+		{
+			Log::write('error', "Directory '{$this->_directory}' is not writeable.");
+			return false;
+		}
+		
+		// has user requested *NOT* to remove blanks?
         if ($this->_remove_whitespace === true)
         {
             $this->_file['name'] = preg_replace('/\s+/u', '_', $this->_file['name']);
         }
-
-        move_uploaded_file($this->_file['tmp_name'], $this->_directory . $this->_file['name']);
+		
+		// try upload
+        if (!move_uploaded_file($this->_file['tmp_name'], $this->_directory . $this->_file['name']))
+		{
+			Log::write('error', "Upload for file {$this->_file['name']} failed.");
+			return false;
+		}
+		
+		// all good
+		return true;
     }
     
-    public function set_directory($directory, $create_dir = false)
+	/**
+     * Sets upload directory.
+	 * 
+	 * @access public
+     * @param  string $dir  	    Upload directory path in filesystem.
+	 * @param  boolean $create_dir  Whether to create directory if it is missing.
+     * @return File  	  			Current class object.
+	 * @uses   Config::get			Gets upload directory configuration item.
+     */
+    public function set_directory($dir, $create_dir = false)
     {
+		// make sure path ends in slash    	
+    	if (substr($dir, 0, -1) !== '/')
+		{
+			$dir .= '/';
+		}
+		
         if (!is_dir($this->_directory))
         {
             if ($create_dir === true)
@@ -157,14 +252,16 @@ class File {
         }
 
         // always upload in preconfigured directory
-        $this->_directory = Config::instance()->get('upload_directory') . $directory . '/';
+        $this->_directory = Config::instance()->get('upload_directory') . $dir;
         return $this;
     }
 	
     /**
-     *
-     * @param type $size
-     * @return File 
+     * Sets maximum upload filesize.
+	 * 
+	 * @access public
+     * @param  int $size  Maximum filesize (in KB)
+     * @return File  	  Current class object.
      */
 	public function set_max_size($size)
 	{
@@ -174,14 +271,15 @@ class File {
 	}
 	
     /**
-     *
-     * @param array $types
-     * @return File 
+     * Sets allowed upload filetypes.
+	 * 
+	 * @access public
+     * @param  array $types  Allowed upload filetypes.
+     * @return File  		 Current class object.
+	 * @uses Log::write		 Writes log in case of duplicate allowed type.
      */
 	public function set_types(array $types)
 	{
-		//$this->_types = $types;
-
 		foreach ($types as $type)
 		{
 			if (in_array($type, $this->_allowed_mimes))
@@ -212,10 +310,21 @@ class File {
 		return $this;
 	}
 	
+	/**
+	 * Runs checks for a single file upload field.
+	 * Validation is split in sub-methods so that inheritance can be used more effectively.
+	 *
+	 * @access public
+	 * @return boolean  Validation result 
+	 * @uses File::_pre_validate Runs pre-validation routines.
+	 * @uses File::_validate_size Checks for max filesize validity.
+	 * @uses File::_validate_types Checks for filetype validity.
+	 */
 	public function validate()
 	{
 		if ($this->_pre_validate() === true || Validation::current()->is_active() === false)
 		{
+			// field is either empty, or validation was not triggered for the current form, skip...
 			return true;
 		}
 		elseif (count(static::$_errors) > 0)
@@ -230,6 +339,13 @@ class File {
 		return count(static::$_errors) > 0 ? false : true;
 	}
     
+	/**
+	 * Runs all necessary routines before proceeding to actual validation.
+	 * 
+	 * @access protected
+	 * @return boolean	True if field is empty or not to be validated.
+	 * @static
+	 */
     protected function _pre_validate()
     {
         // If file was not submitted, skip validation
@@ -241,47 +357,61 @@ class File {
         I18n::instance()->load('upload');
         $general_error = sprintf(I18n::instance()->line('invalid_filesize'), $this->_file['name']);
         
+		// check for PHP upload errors
         // if there is a PHP upload error, upload will not continue
         switch ($this->_file['error'])
         {
             case 0:
                 break;
             case 1: 
-                static::$_errors[] = sprintf(I18n::instance()->line('invalid_filesize'), $this->_file['name']);
+                static::$_errors[$this->_file['name']] = sprintf(I18n::instance()->line('invalid_filesize'), $this->_file['name']);
                 break;
             case 2:
-                static::$_errors[] = $general_error;
+                static::$_errors[$this->_file['name']] = $general_error;
                 Log::write('error', "File '{$this->_file['name']}' exceeds the maximum size allowed by the submission form");
                 break;
             case 3:
-                static::$_errors[] = $general_error;
+                static::$_errors[$this->_file['name']] = $general_error;
                 Log::write('error', "File '{$this->_file['name']}' was only partially uploaded");
                 break;
             case 4: 
                 break;
             case 6: 
-                static::$_errors[] = $general_error;
+                static::$_errors[$this->_file['name']] = $general_error;
                 Log::write('error', 'The temporary folder is missing');
                 break;
             case 7:
-                static::$_errors[] = $general_error;
+                static::$_errors[$this->_file['name']] = $general_error;
                 Log::write('error', "File '{$this->_file['name']}' could not be written to disk");
                 break;
             case 8: 
-                static::$_errors[] = $general_error; 
+                static::$_errors[$this->_file['name']] = $general_error; 
                 Log::write('error', "File '{$this->_file['name']}' was stopped by extension");
                 break;
         }
     }
     
+    /**
+	 * Validates an uploaded file by type, comparing it to the maximum allowed filesize.
+	 * 
+	 * @access protected
+	 * @static
+	 */
     protected function _validate_size()
     {
         if (isset($this->_max_size) && $this->_file['size'] > $this->_max_size)
         {
-            static::$_errors[] = sprintf(I18n::instance()->line('invalid_filesize'), $this->_file['name']);
+            static::$_errors[$this->_file['name']] = sprintf(I18n::instance()->line('invalid_filesize'), $this->_file['name']);
         }
     }
     
+    /**
+	 * Validates an uploaded file by type, comparing it to the allowed filetypes.
+	 * Also compares against mime type.
+	 * 
+	 * @access protected
+	 * @static
+	 */
 	protected function _validate_types()
 	{
 		if (count($this->_types) > 0)
@@ -295,25 +425,31 @@ class File {
 
 			if (!in_array($ext, $this->_types) || !in_array($mime_type, $this->_allowed_mimes))
 			{
-				static::$_errors[] = sprintf(I18n::instance()->line('invalid_filetype'), $this->_file['name']);
+				static::$_errors[$this->_file['name']] = sprintf(I18n::instance()->line('invalid_filetype'), $this->_file['name']);
 			}
 		}
 	}
     
-	public static function get_errors()
+	/**
+	 * Displays validation errors for a single or all file upload fields in form.
+	 * 
+	 * @access public
+	 * @param  string $field  The field to display errors for.
+	 * @return array 		  Validation errors.
+	 * @static
+	 */
+	public static function get_errors($field = null)
 	{
-        if (count(static::$_errors) === 0 || Validation::current()->is_active() === false)
+        if (Validation::current()->is_active() === false)
         {
-            return;
+            return array();
         }
-        
-		$errors = '<ul class="errors">';
-
-		foreach (static::$_errors as $error)
+		
+		if (is_null($field))
 		{
-			$errors .= '<li>' . $error . '</li>';
+			return static::$_errors;
 		}
-
-		return $errors . '</ul>';
+        
+		return isset(static::$_errors[$field]) ? static::$_errors[$field] : array();
 	}
 }
