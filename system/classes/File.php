@@ -1,6 +1,7 @@
 <?php if (!defined('SYSTEM')) exit('No direct script access allowed');
 
 class File {
+    
     /**
      * @access protected
      * @var array Stores validation errors
@@ -362,32 +363,32 @@ class File {
         switch ($this->_file['error'])
         {
             case 0:
-            break;
+                break;
             case 1:
-            static::$_errors[$this->_file['name']] = sprintf(I18n::instance()->line('invalid_filesize'), $this->_file['name']);
-            break;
+                static::$_errors[$this->_file['name']] = sprintf(I18n::instance()->line('invalid_filesize'), $this->_file['name']);
+                break;
             case 2:
-            static::$_errors[$this->_file['name']] = $general_error;
-            Log::write('error', "File '{$this->_file['name']}' exceeds the maximum size allowed by the submission form");
-            break;
+                static::$_errors[$this->_file['name']] = $general_error;
+                Log::write('error', "File '{$this->_file['name']}' exceeds the maximum size allowed by the submission form");
+                break;
             case 3:
-            static::$_errors[$this->_file['name']] = $general_error;
-            Log::write('error', "File '{$this->_file['name']}' was only partially uploaded");
-            break;
+                static::$_errors[$this->_file['name']] = $general_error;
+                Log::write('error', "File '{$this->_file['name']}' was only partially uploaded");
+                break;
             case 4:
-            break;
+                break;
             case 6:
-            static::$_errors[$this->_file['name']] = $general_error;
-            Log::write('error', 'The temporary folder is missing');
-            break;
+                static::$_errors[$this->_file['name']] = $general_error;
+                Log::write('error', 'The temporary folder is missing');
+                break;
             case 7:
-            static::$_errors[$this->_file['name']] = $general_error;
-            Log::write('error', "File '{$this->_file['name']}' could not be written to disk");
-            break;
+                static::$_errors[$this->_file['name']] = $general_error;
+                Log::write('error', "File '{$this->_file['name']}' could not be written to disk");
+                break;
             case 8:
-            static::$_errors[$this->_file['name']] = $general_error;
-            Log::write('error', "File '{$this->_file['name']}' was stopped by extension");
-            break;
+                static::$_errors[$this->_file['name']] = $general_error;
+                Log::write('error', "File '{$this->_file['name']}' was stopped by extension");
+                break;
         }
     }
     
