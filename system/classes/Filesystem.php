@@ -117,7 +117,7 @@ class Filesystem {
      * @param  string $old_path  Old file path.
      * @param  string $new_path  New file path.
      * @return boolean           True on successful check, false otherwise. 
-     * @uses   Filesystem::rename_folder  Renames file.
+     * @uses   Filesystem::rename_file  Renames file.
      * @static
      */
     public static function move_file($old_path, $new_path)

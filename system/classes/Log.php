@@ -3,9 +3,8 @@
 class Log {
     
     /**
-     * Stores log types.
-     * 
-     * @var array
+     * @access private
+	 * @var array Stores log types.
      * @static 
      */
     private static $_types = array (
@@ -15,17 +14,15 @@ class Log {
     );
     
     /**
-     * Stores log filename.
-     * 
-     * @var string
+     * @access private
+	 * @var string Stores log filename.
      * @static 
      */
     private static $_filename;
     
     /**
-     * Stores log message.
-     * 
-     * @var string
+     * @access private
+	 * @var string Stores log message.
      * @static 
      */
     private static $_message;
@@ -34,7 +31,10 @@ class Log {
      * Logs a message in /application/logs/ directory.
      * Logs are stored in separate files for specific dates. 
      * 
-     * @param string $message  The message to be logged.
+	 * @access public
+	 * @param  string $type		Message type.
+     * @param  string $message  The message to be logged.
+	 * @static
      */
     public static function write($type, $message)
     {

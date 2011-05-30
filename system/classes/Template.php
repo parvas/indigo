@@ -4,10 +4,10 @@ class Template {
     
     private static $_instance;
     private $_head;
-    private $_description;
-    private $_keywords;
-    private $_title;
-    private $_body;
+    private $_description = '';
+    private $_keywords = '';
+    private $_title = '';
+    private $_body = '';
     private $_data = array();
     
     /**
@@ -86,13 +86,19 @@ class Template {
         
     }
     
+    public function set($key, $value)
+    {
+        $this->_data[$key] = $value;
+        return $this;
+    }
+    
     public function render($view, $data = array())
     {
         $this->_body .= View::factory($view, $data)->render();
 
         if (Module::is_master())
         {
-            $this->_data = array(
+            $this->_data += array(
                 'head'        => $this->_head,
                 'description' => $this->_description,
                 'keywords'    => $this->_keywords,

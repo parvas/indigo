@@ -2,6 +2,16 @@
 
 class Text {
     
+	/**
+	 * Limit a given string to given number of words.
+	 * 
+	 * @access public
+	 * @param  string $text  String to be limited.
+	 * @param  int $limit  	 Maximum number of words.
+	 * @param  string $end   Trailing string.
+	 * @return string		 Limited text.
+	 * @static
+	 */
     public static function limit_words($text, $limit, $end = '...')
     {
         if (!is_int($limit) || $limit < 1)
@@ -17,6 +27,16 @@ class Text {
         return implode(' ', array_slice(explode(' ', $text), 0, $limit)) . $end;
     }
     
+	/**
+	 * Limit a given string to given number of characters (including trailing string).
+	 * 
+	 * @access public
+	 * @param  string $text  String to be limited.
+	 * @param  int $limit  	 Maximum number of characters.
+	 * @param  string $end   Trailing string.
+	 * @return string		 Limited text.
+	 * @static
+	 */
     public static function limit_chars($text, $limit, $end = '...')
     {
         if (!is_int($limit) || $limit < 1)

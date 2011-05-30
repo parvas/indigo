@@ -230,9 +230,9 @@ class Module {
      * Searches for one of the following: controller, view, model.
      * 
      * @access public
-     * @param  string $item  Relative path of file.
-     * @param  string $type  Type of file to be loaded (controller, view, model).
-     * @return string        Absolute path of file to be loaded.
+     * @param  string $item  	 Relative path of file.
+     * @param  string $type  	 Type of file to be loaded (controller, view, model).
+     * @return string $filename  Absolute path of file to be loaded.
      * @static  
      */
     public static function find($item, $type = 'module')

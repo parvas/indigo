@@ -86,7 +86,7 @@ class Email {
     {
         if (is_array($to))
         {
-            $to = implode(',', $to);
+            $to = implode(', ', $to);
         }
         
         $this->_to = $to;
@@ -104,7 +104,7 @@ class Email {
     {
         if (is_array($cc))
         {
-            $cc = implode(',', $cc);
+            $cc = implode(', ', $cc);
         }
         
         $this->_headers .= "Cc: $cc\r\n";
@@ -122,7 +122,7 @@ class Email {
     {
         if (is_array($bcc))
         {
-            $bcc = implode(',', $bcc);
+            $bcc = implode(', ', $bcc);
         }
         
         $this->_headers .= "Bcc: $bcc\r\n";

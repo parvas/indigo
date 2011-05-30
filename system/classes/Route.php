@@ -11,7 +11,7 @@ class Route {
         if (static::$_module == '')
         {
             static::$_module = Config::instance()->get('default_controller');
-            header('Location: ' . WEB . static::$_module);
+			header('Location: ' . WEB . static::$_module);
         }
 
         Module::factory(static::$_module);
