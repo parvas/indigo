@@ -40,4 +40,18 @@ abstract class Controller {
         $this->model       = Model::factory();
         $this->module      = Module::instance(); 
     }
+    
+    /**
+     * Contains all tasks to be executed *before* each controller method
+     * 
+     * @access public
+     */
+    public function before(){}
+    
+    /**
+     * Contains all tasks to be executed *after* each controller method
+     * 
+     * @access public
+     */
+    public function after(){}
 }

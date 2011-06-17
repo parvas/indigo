@@ -157,6 +157,9 @@ class Module {
         $instance = new $class;
         static::_add_to_stack();
         
+        // execute the "before" tasks
+        $instance->before();
+        
         // pseudo-static method invocation instead of call_user_func()
         switch (count(static::$_params))
         {
@@ -173,6 +176,9 @@ class Module {
                 $instance->{static::$_method}(static::$_params[0], static::$_params[1], static::$_params[2]);
                 break;
         }
+        
+        // execute all "after" tasks
+        $instance->after();
         
         static::_remove_from_stack();
     }
