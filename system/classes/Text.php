@@ -2,16 +2,16 @@
 
 class Text {
     
-	/**
-	 * Limit a given string to given number of words.
-	 * 
-	 * @access public
-	 * @param  string $text  String to be limited.
-	 * @param  int $limit  	 Maximum number of words.
-	 * @param  string $end   Trailing string.
-	 * @return string		 Limited text.
-	 * @static
-	 */
+   /**
+    * Limit a given string to given number of words.
+    *
+    * @access public
+    * @param  string $text  String to be limited.
+    * @param  int $limit       Maximum number of words.
+    * @param  string $end   Trailing string.
+    * @return string         Limited text.
+    * @static
+    */
     public static function limit_words($text, $limit, $end = '...')
     {
         if (!is_int($limit) || $limit < 1)
@@ -27,16 +27,16 @@ class Text {
         return implode(' ', array_slice(explode(' ', $text), 0, $limit)) . $end;
     }
     
-	/**
-	 * Limit a given string to given number of characters (including trailing string).
-	 * 
-	 * @access public
-	 * @param  string $text  String to be limited.
-	 * @param  int $limit  	 Maximum number of characters.
-	 * @param  string $end   Trailing string.
-	 * @return string		 Limited text.
-	 * @static
-	 */
+   /**
+    * Limit a given string to given number of characters (including trailing string).
+    *
+    * @access public
+    * @param  string $text  String to be limited.
+    * @param  int $limit       Maximum number of characters.
+    * @param  string $end   Trailing string.
+    * @return string         Limited text.
+    * @static
+    */
     public static function limit_chars($text, $limit, $end = '...')
     {
         if (!is_int($limit) || $limit < 1)
@@ -52,17 +52,17 @@ class Text {
         return mb_substr($text, 0, $limit - strlen($end), 'UTF-8') . $end;
     }
     
-    /**
-     * Extracts array name from string if supplied argument is in array format,
-     * for example: string: select[] -> name: select.
-     * 
-     * @access  private
-     * @param   string $name  String containing variable name.
-     * @return  string        Array name if argument is array, the argument itself otherwise.  
-     * @static
-     */
+   /**
+    * Extracts array name from string if supplied argument is in array format,
+    * for example: string: select[] -> name: select.
+    *
+    * @access  private
+    * @param   string $name  String containing variable name.
+    * @return  string        Array name if argument is array, the argument itself otherwise.
+    * @static
+    */
     public static function extract_array_name($name)
     {
-        return (($pos = strpos($name, '[')) !== false) ? substr($name, $pos) : $name;	
+        return (($pos = strpos($name, '[')) !== false) ? substr($name, $pos) : $name;
     }
 }

@@ -2,40 +2,40 @@
 
 class Log {
     
-    /**
-     * @access private
-	 * @var array Stores log types.
-     * @static 
-     */
+   /**
+    * @access private
+    * @var array Stores log types.
+    * @static
+    */
     private static $_types = array (
-        'error'     => 'ERROR',
-        'debug'     => 'DEBUG',
-        'warning'   => 'WARNING'
+    'error'     => 'ERROR',
+    'debug'     => 'DEBUG',
+    'warning'   => 'WARNING'
     );
     
-    /**
-     * @access private
-	 * @var string Stores log filename.
-     * @static 
-     */
+   /**
+    * @access private
+    * @var string Stores log filename.
+    * @static
+    */
     private static $_filename;
     
-    /**
-     * @access private
-	 * @var string Stores log message.
-     * @static 
-     */
+   /**
+    * @access private
+    * @var string Stores log message.
+    * @static
+    */
     private static $_message;
     
-    /**
-     * Logs a message in /application/logs/ directory.
-     * Logs are stored in separate files for specific dates. 
-     * 
-	 * @access public
-	 * @param  string $type		Message type.
-     * @param  string $message  The message to be logged.
-	 * @static
-     */
+   /**
+    * Logs a message in /application/logs/ directory.
+    * Logs are stored in separate files for specific dates.
+    *
+    * @access public
+    * @param  string $type        Message type.
+    * @param  string $message  The message to be logged.
+    * @static
+    */
     public static function write($type, $message)
     {
         $path = APP . 'logs/';
@@ -49,7 +49,7 @@ class Log {
         {
             throw new Exceptions("Directory '{$path}' is not writeable");
         }
-
+        
         // separate file for specific date
         static::$_filename = 'log_' . date('Y-m-d') . '.php';
         
