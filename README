@@ -11,3 +11,5 @@ Indigo: A Hierarchical MVC PHP 5.3+ Framework
 - MongoDB powered (no support for a relational database as of now)
 - Modular Separation (instead of files all stored in huge controllers/views/models directories)
 - Nested modularity (submodules may extend parent modules)
+
+Join the chat at https://gitter.im/parvas/indigo
